@@ -5,3 +5,4 @@ Route::get('/', function () {
 });
 
 Route::get('register_usuario','UsuarioController@register_usuario');
+Route::post('save_user','UsuarioController@save_user');
