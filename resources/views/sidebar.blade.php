@@ -36,8 +36,7 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="{{ url('register_usuario') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
-					<li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Administrar</a></li>
+					<li><a href="{{ url('register_usuario') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
 				</ul>
 			</li>
 			<li class="treeview active">
@@ -48,7 +47,7 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="../../index.html"><i class="fa fa-circle-o"></i> Registrar</a></li>
+					<li><a href="{{ url('register_funcionario') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
 					<li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Administrar</a></li>
 				</ul>
 			</li>
