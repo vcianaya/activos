@@ -14,6 +14,7 @@ class AreaTable extends Migration
 			$table->string('descripcion', 255)->nullable();
 			$table->integer('sucursal')->nullable()->unsigned();
 			$table->foreign('sucursal')->references('id')->on('sucursal')->onDelete('cascade');
+      $table->integer('estado')->default(1);
 		});
 	}
 	public function down()

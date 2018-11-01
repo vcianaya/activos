@@ -7,10 +7,10 @@
 		<!-- Sidebar user panel -->
 		<div class="user-panel">
 			<div class="pull-left image">
-				<img src="{{ url('template/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+				<img src="{{ url('storage/'.Auth::user()->foto ) }}" class="img-circle" alt="User Image">
 			</div>
 			<div class="pull-left info">
-				<p>Alexander Pierce</p>
+				<p>{{ Auth::user()->nombre.' '.Auth::user()->ap_paterno }}</p>
 				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 			</div>
 		</div>
@@ -51,6 +51,19 @@
 					<li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Administrar</a></li>
 				</ul>
 			</li>
+
+			<li class="treeview active">
+				<a href="#">
+					<i class="fa fa-industry"></i> <span>SUCURSALES</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{{ url('registrar_sucursal') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
+				</ul>
+			</li>
+
 			<li class="header">LABELS</li>
 			<li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
 			<li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>

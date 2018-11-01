@@ -54,16 +54,19 @@
 								<input type="text" value="{{ old('nombre') }}" name="nombre" class="form-control" placeholder="Ej. Selem">
 								<span class="help-block">{{ $errors->first('nombre') }}</span>
 							</div>
+
 							<div class="form-group {{ $errors->has('apellidoPaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido paterno <i class="required">*</i></label>
 								<input type="text" value="{{ old('apellidoPaterno') }}" name="apellidoPaterno" class="form-control" placeholder="Ej. Luna">
 								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
+
 							<div class="form-group {{ $errors->has('apellidoMaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido materno <i class="required">*</i></label>
 								<input type="text" value="{{ old('apellidoMaterno') }}" name="apellidoMaterno" class="form-control">
 								<span class="help-block">{{ $errors->first('apellidoMaterno') }}</span>
 							</div>
+
 							<div class="form-group {{ $errors->has('email')?'has-error':'' }}">
 								<label class="control-label">Email <i class="required">*</i></label>
 								<input type="Email" value="{{ old('email') }}" name="email" class="form-control" placeholder="selem@gmail.com" readonly>
@@ -149,20 +152,20 @@
 @endsection
 
 @section('js')
-<script type="text/javascript">
+	<script type="text/javascript">
+		
+		$(document).ready(function() {
+			$('#users-table').DataTable({
+				"language": {
+					"url": "{{ url('template/bower_components/datatables.net/spanish.json') }}"
+				},
+				'columnDefs': [
+				{
+					"targets": [0,1,2,3,4],
+					"className": "text-center",
+				},],
+			});
+		})
 
-	$(document).ready(function() {
-		$('#users-table').DataTable({
-			"language": {
-				"url": "{{ url('template/bower_components/datatables.net/spanish.json') }}"
-			},
-			'columnDefs': [
-			{
-				"targets": [0,1,2,3,4],
-				"className": "text-center",
-			},],
-		});
-	})
-
-</script>
-@endsection
+	</script>
+	@endsection
