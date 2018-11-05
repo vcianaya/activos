@@ -31,4 +31,8 @@ Route::get('edit_area/{id_area}','SucursalController@edit_area');
 Route::post('update_area','SucursalController@update_area');
 Route::get('delete_area/{id_area}','SucursalController@delete_area');
 Route::get('restore_area/{id_area}','SucursalController@restore_area');
+// LOGICA DE CREACION DE ALMACENES
+Route::post('create_almacen','SucursalController@create_almacen');
+Route::get('get_almacenes/{id_sucursal}','SucursalController@get_almacenes');
+
 Route::get('/home', 'HomeController@index')->name('home');

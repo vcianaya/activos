@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 //MODELS
 use App\Sucursal;
 use App\Area;
-
+use App\Almacen;
 class SucursalController extends Controller
 {
 	public function registrar_sucursal()
@@ -139,7 +139,8 @@ class SucursalController extends Controller
 		$sucursal = Sucursal::find($id_sucursal);
 		if ($sucursal->estado == 1) {
 			$area = Area::where('sucursal', $sucursal->id)->count();
-			return view('sucursal.sucursal',['sucursal'=>$sucursal,'total_areas'=>$area]);
+			$almacen = Almacen::where('sucursal', $sucursal->id)->count();
+			return view('sucursal.sucursal',['sucursal'=>$sucursal,'total_areas'=>$area,'total_almacenes'=>$almacen]);
 		}else{
 			return back();
 		}
@@ -222,5 +223,43 @@ class SucursalController extends Controller
 		$area->estado = 1;
 		$area->save();
 		return response()->json(['type' => 'success','icon'=>'fa fa-edit','message'=>'Area restaurada']);
+	}
+
+	public function create_almacen(Request $request)
+	{
+		$this->validate($request, [
+			'almacen' => 'required',
+			'descripcion' => 'required'
+		]);
+		$almacen = new Almacen();
+		$almacen->nombre = strtoupper($request->almacen);
+		$almacen->descripcion = strtoupper($request->descripcion);
+		$almacen->sucursal = $request->sucursal;
+		$almacen->save();
+		return response()->json(['type' => 'success','icon'=>'fa fa-edit','message'=>'Almacen Creado']);
+	}
+
+	public function get_almacenes($id_sucursal)
+	{
+		$almacenes_data = Almacen::where('sucursal',$id_sucursal)->get();
+		$almacen = [];
+		foreach ($almacenes_data as $item) {
+			$almacen[] = [
+				'DT_RowId' => $item->id,
+				'nombre' => $item->nombre,
+				'descripcion' => $item->descripcion,
+				'accion' =>
+				'<div class="btn-group">
+						<a href="#" data-balloon="Editar Almacen" data-balloon-pos="up" type="button" class="btn btn-warning edit-almacen">
+							<i class="fa fa-edit"></i>
+						</a>
+						<a href="#" data-balloon="Ver Almacen" data-balloon-pos="up" type="button" class="btn btn-info ver-equipos">
+							<i class="fa fa-folder-open"></i>
+						</a>
+				</div>'
+
+			];
+		}
+		return response()->json(['data' => $almacen]);
 	}
 }
