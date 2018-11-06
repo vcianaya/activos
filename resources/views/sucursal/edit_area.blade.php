@@ -1,5 +1,4 @@
 <form role="form" id="frm_area">
-	{{ csrf_field() }}
 	<div class="box-body">
 		<input type="hidden" id="id_area" value="{{ $area->id }}">
 		<div class="form-group">

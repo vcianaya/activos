@@ -2,6 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ url('template/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+<link rel="stylesheet" href="{{ url('template/bower_components/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('content-wrapper')
@@ -133,16 +134,6 @@
 								<input type="number" class="form-control" name="nro_puerta">
 								<span class="help-block">{{ $errors->first('nro_puerta') }}</span>
 							</div>
-
-							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
-								<label class="control-label">Genero <i class="required">*</i></label>
-								<select class="form-control" name="genero">
-									<option value="">Elija una opcion</option>
-									<option value="LP" {{ (old('genero') == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
-									<option value="OR" {{ (old('genero') == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
-								</select>
-								<span class="help-block">{{ $errors->first('genero') }}</span>
-							</div>	
 						</div>
 					</div>
 				</div>
@@ -171,34 +162,34 @@
 								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
+							<div class="form-group {{ $errors->has('sucursal')?'has-error':'' }}">
 								<label class="control-label">Sucursal <i class="required">*</i></label>
-								<select class="form-control" name="genero">
+								<select id="sucursal" class="form-control" name="sucursal">
 									<option value="">Elija una opcion</option>
-									<option value="LP" {{ (old('genero') == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
-									<option value="OR" {{ (old('genero') == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
+									@foreach ($sucursal as $item)
+										<option value="{{ $item->id }}" {{ (old('sucursal') ==  $item->id )?'selected':'' }}>{{ $item->nombre }}</option>
+									@endforeach
 								</select>
-								<span class="help-block">{{ $errors->first('genero') }}</span>
+								<span class="help-block">{{ $errors->first('sucursal') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
 								<label class="control-label">Area <i class="required">*</i></label>
-								<select class="form-control" name="genero">
-									<option value="">Elija una opcion</option>
-									<option value="LP" {{ (old('genero') == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
-									<option value="OR" {{ (old('genero') == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
+								<select class="form-control select2" style="width: 100%;" name="genero">
 								</select>
 								<span class="help-block">{{ $errors->first('genero') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
+							<div class="form-group {{ $errors->has('cargo')?'has-error':'' }}">
 								<label class="control-label">Cargo <i class="required">*</i></label>
-								<select class="form-control" name="genero">
+								<select class="form-control" name="cargo">
 									<option value="">Elija una opcion</option>
-									<option value="LP" {{ (old('genero') == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
-									<option value="OR" {{ (old('genero') == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
+									<option value="RECAUDADOR">RECAUDADOR</option>
+									<option value="INFORMACIONES">INFORMACIONES</option>
+									<option value="PLATAFORMA">PLATAFORMA</option>
+									<option value="TECNICO">TECNICO</option>
 								</select>
-								<span class="help-block">{{ $errors->first('genero') }}</span>
+								<span class="help-block">{{ $errors->first('cargo') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('foto')?'has-error':'' }}">
@@ -222,6 +213,7 @@
 @section('js')
 <script src="{{ url('template/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('template/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js') }}"></script>
+<script src="{{ url('template/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#datepicker').datepicker({
@@ -229,16 +221,17 @@
 			language: 'es',
 			format: 'yyyy/mm/dd',
 		});
-
-		$('#users-table').DataTable({
-			"language": {
-				"url": "{{ url('template/bower_components/datatables.net/spanish.json') }}"
-			},
-			'columnDefs': [
-			{
-				"targets": [0,1,2,3,4],
-				"className": "text-center",
-			},],
+		
+		$( "#sucursal" ).change(function() {
+			id_sucursal = $('#sucursal').val();
+			$.ajax({
+				url: "{{ url('get_areas_select2') }}/"+id_sucursal,
+				success:function(response){
+					console.log(response.data);
+					$('.select2').empty();
+					$('.select2').select2({data: response.data});
+				}
+			});
 		});
 	})
 

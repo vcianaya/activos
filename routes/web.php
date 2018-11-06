@@ -16,6 +16,8 @@ Route::get('restore_user/{id}','UsuarioController@restore_user');
 
 // LOGICA DE FUNCIONARIOS
 Route::get('register_funcionario','FuncionarioController@register_funcionario');
+Route::get('get_areas_select2/{id_sucursal}','FuncionarioController@get_areas_select2');
+
 // LOGICA DE SUCURSALES
 Route::get('registrar_sucursal','SucursalController@registrar_sucursal');
 Route::post('save_sucursal','SucursalController@save_sucursal');
@@ -34,5 +36,7 @@ Route::get('restore_area/{id_area}','SucursalController@restore_area');
 // LOGICA DE CREACION DE ALMACENES
 Route::post('create_almacen','SucursalController@create_almacen');
 Route::get('get_almacenes/{id_sucursal}','SucursalController@get_almacenes');
+Route::get('edit_almacen/{id_almacen}','SucursalController@edit_almacen');
+Route::post('update_almacen','SucursalController@update_almacen');
 
 Route::get('/home', 'HomeController@index')->name('home');

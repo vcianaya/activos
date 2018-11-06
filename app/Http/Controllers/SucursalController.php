@@ -262,4 +262,23 @@ class SucursalController extends Controller
 		}
 		return response()->json(['data' => $almacen]);
 	}
+
+	public function edit_almacen($id_almacen)
+	{
+		$almacen = Almacen::find($id_almacen);
+		return Response::json(view('sucursal.edit_almacen', ['almacen'=>$almacen])->render());
+	}
+
+	public function update_almacen(Request $request)
+	{
+		$this->validate($request, [
+			'almacen' => 'required',
+			'descripcion' => 'required'		
+		]);
+		$almacen = Almacen::find($request->id_almacen);
+		$almacen->nombre = strtoupper($request->almacen);
+		$almacen->descripcion = strtoupper($request->descripcion);
+		$almacen->save();
+		return response()->json(['type' => 'warning','icon'=>'fa fa-edit','message'=>'Area Actualizada']);
+	}
 }

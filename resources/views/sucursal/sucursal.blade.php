@@ -293,7 +293,7 @@
 				modal.find('.modal').addClass("bs-example-modal-sm");
 				modal.find('.modal-dialog').addClass("modal-sm");
 				modal.find('h4').text('Eliminar area');
-				modal.find('p').text('Esta Seguro de eliminar el area..?');
+				body.html('Esta Seguro de eliminar el area..?');
 				modal.find('.btn-default').text('Cancelar');
 				modal.find('.btn-primary').text('Aceptar');
 				id_area = $(this).closest('tr').attr('id');
@@ -372,7 +372,7 @@
 				modal.modal('show');
 			});
 			// TABLE ALMACENES
-			table_area = $('#table-almacen').DataTable({
+			table_almacen = $('#table-almacen').DataTable({
 				"processing": true,
 				"aaSorting": [],
 				"ajax": "{{ url('get_almacenes/'.$sucursal->id) }}",
@@ -402,7 +402,7 @@
 				modal.find('.btn-primary').text('Actualizar');
 				id_almacen = $(this).closest('tr').attr('id');
 				$.ajax({
-					url: "{{ url('edit_area') }}/"+id_almacen,
+					url: "{{ url('edit_almacen') }}/"+id_almacen,
 					success:function(response){
 						body = modal.find('.modal-body');
 						body.html(response);
@@ -411,28 +411,28 @@
 				modal.find('.btn-primary').off().on('click',function(e){
 					e.preventDefault();
 					$.ajax({
-						url: '{{ url('update_area') }}',
+						url: '{{ url('update_almacen') }}',
 						type: 'post',
 						dataType: 'json',
 						data: {
 							_token: '{{ csrf_token() }}',
-							id_area: body.find('#id_area').val(),
-							area: body.find('#area').val(),
-							descripcion: body.find('#area_descripcion').val()
+							id_almacen: body.find('#id_almacen').val(),
+							almacen: body.find('#almacen').val(),
+							descripcion: body.find('#almacen_descripcion').val()
 						},
 						success: function (result) {
-							table_area.ajax.reload();
+							table_almacen.ajax.reload();
 							modal.modal('hide');
 							notify(result.type, result.icon, result.message);
 						},
 						error: function (error) {
 							error = error.responseJSON;
 							(error.area)?
-							body.find('#area').closest('div').addClass('has-error').find('.help-block').text(error.area[0]):
-							body.find("#area").closest('div').removeClass('has-error').find('.help-block').text('');
+							body.find('#almacen').closest('div').addClass('has-error').find('.help-block').text(error.almacen[0]):
+							body.find("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
 							(error.descripcion)?
-							body.find("#area_descripcion").closest('div').addClass('has-error').find('.help-block').text(error.descripcion[0]):
-							body.find("#area_descripcion").closest('div').removeClass('has-error').find('.help-block').text('');
+							body.find("#almacen_descripcion").closest('div').addClass('has-error').find('.help-block').text(error.descripcion[0]):
+							body.find("#almacen_descripcion").closest('div').removeClass('has-error').find('.help-block').text('');
 						}
 					})
 				});
