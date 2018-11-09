@@ -58,9 +58,13 @@ return [
 				'driver' => 'local',
 				'root'   => base_path('public/storage/foto_usuario'),
 			],
-			'foto_funcionario' => [
+      'foto_funcionario' => [
+        'driver' => 'local',
+        'root'   => base_path('public/storage/foto_funcionario'),
+      ],
+			'foto_sucursal' => [
 				'driver' => 'local',
-				'root'   => base_path('public/storage/foto_funcionario'),
+				'root'   => base_path('public/storage/foto_sucursal'),
 			],
 			's3' => [
 				'driver' => 's3',

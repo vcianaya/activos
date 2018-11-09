@@ -42,7 +42,7 @@ class SucursalController extends Controller
 		$sucursal->email = $request->email;
 		$sucursal->fax = strtoupper($request->fax);
 		$sucursal->estado = 1;
-		$sucursal->foto = $request->file('foto')->store('foto_funcionario');
+		$sucursal->foto = $request->file('foto')->store('foto_sucursal');
 		$sucursal->user = Auth::user()->id;
 		$sucursal->save();
 

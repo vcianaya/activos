@@ -17,6 +17,7 @@ Route::get('restore_user/{id}','UsuarioController@restore_user');
 // LOGICA DE FUNCIONARIOS
 Route::get('register_funcionario','FuncionarioController@register_funcionario');
 Route::get('get_areas_select2/{id_sucursal}','FuncionarioController@get_areas_select2');
+Route::post('save_funcionario','FuncionarioController@save_funcionario');
 
 // LOGICA DE SUCURSALES
 Route::get('registrar_sucursal','SucursalController@registrar_sucursal');

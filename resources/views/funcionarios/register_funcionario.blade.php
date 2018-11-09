@@ -25,7 +25,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Datos del personales funcionario</h3>
 					</div>
-					<form role="form" method="post" enctype="multipart/form-data" action="{{ url('save_user') }}">
+					<form role="form" method="post" enctype="multipart/form-data" action="{{ url('save_funcionario') }}">
 						{{ csrf_field() }}
 						<div class="box-body">
 							<div class="form-group {{ $errors->has('ci')?'has-error':'' }}">
@@ -56,26 +56,28 @@
 								<input type="text" value="{{ old('nombre') }}" name="nombre" class="form-control" placeholder="Ej. Selem">
 								<span class="help-block">{{ $errors->first('nombre') }}</span>
 							</div>
+
 							<div class="form-group {{ $errors->has('apellidoPaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido paterno <i class="required">*</i></label>
 								<input type="text" value="{{ old('apellidoPaterno') }}" name="apellidoPaterno" class="form-control" placeholder="Ej. Luna">
 								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
+
 							<div class="form-group {{ $errors->has('apellidoMaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido materno <i class="required">*</i></label>
 								<input type="text" value="{{ old('apellidoMaterno') }}" name="apellidoMaterno" class="form-control">
 								<span class="help-block">{{ $errors->first('apellidoMaterno') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('fec_nac')?'has-error':'' }}">
-								<label>Fecha nacimiento:</label>
+							<div class="form-group {{ $errors->has('fechaNacimiento')?'has-error':'' }}">
+								<label>Fecha nacimiento: <i class="required">*</i></label>
 								<div class="input-group date">
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" class="form-control pull-right" id="datepicker" name="fec_nac">
+									<input type="text" class="form-control pull-right" id="datepicker" name="fechaNacimiento">
 								</div>
-								<span class="help-block">{{ $errors->first('fec_nac') }}</span>
+								<span class="help-block">{{ $errors->first('fechaNacimiento') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
@@ -118,21 +120,18 @@
 								<span class="help-block">{{ $errors->first('ciudad') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('zona')?'has-error':'' }}">
-								<label class="control-label">Zona <i class="required">*</i></label>
+							<div class="form-group">
+								<label class="control-label">Zona</label>
 								<input type="text" value="{{ old('zona') }}" name="zona" class="form-control" placeholder="Ej. Satelite">
-								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
-							<div class="form-group {{ $errors->has('calle')?'has-error':'' }}">
-								<label class="control-label">Calle <i class="required">*</i></label>
+							<div class="form-group">
+								<label class="control-label">Calle </label>
 								<input type="text" value="{{ old('calle') }}" name="calle" class="form-control">
-								<span class="help-block">{{ $errors->first('calle') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('nro_puerta')?'has-error':'' }}">
+							<div class="form-group">
 								<label>Nro. Puerta:</label>
 								<input type="number" class="form-control" name="nro_puerta">
-								<span class="help-block">{{ $errors->first('nro_puerta') }}</span>
 							</div>
 						</div>
 					</div>
@@ -144,10 +143,9 @@
 							<h3 class="box-title">Datos generales del funcionario</h3>
 						</div>
 						<div class="box-body">
-							<div class="form-group {{ $errors->has('telefono')?'has-error':'' }}">
-								<label class="control-label">Nro. Telefono <i class="required">*</i></label>
+							<div class="form-group">
+								<label class="control-label">Nro. Telefono</label>
 								<input type="number" value="{{ old('telefono') }}" name="telefono" class="form-control" placeholder="Ej. El Alto">
-								<span class="help-block">{{ $errors->first('telefono') }}</span>
 							</div>
 							
 							<div class="form-group {{ $errors->has('celular')?'has-error':'' }}">
@@ -156,10 +154,9 @@
 								<span class="help-block">{{ $errors->first('celular') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('email')?'has-error':'' }}">
-								<label class="control-label">Email <i class="required">*</i></label>
+							<div class="form-group">
+								<label class="control-label">Email</label>
 								<input type="email" value="{{ old('email') }}" name="email" class="form-control" placeholder="Ej. selen@gmail.com">
-								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('sucursal')?'has-error':'' }}">
@@ -173,21 +170,20 @@
 								<span class="help-block">{{ $errors->first('sucursal') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('genero')?'has-error':'' }}">
+							<div class="form-group {{ $errors->has('area')?'has-error':'' }}">
 								<label class="control-label">Area <i class="required">*</i></label>
-								<select class="form-control select2" style="width: 100%;" name="genero">
+								<select class="form-control select2" style="width: 100%;" name="area">
 								</select>
-								<span class="help-block">{{ $errors->first('genero') }}</span>
+								<span class="help-block">{{ $errors->first('area') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('cargo')?'has-error':'' }}">
 								<label class="control-label">Cargo <i class="required">*</i></label>
 								<select class="form-control" name="cargo">
 									<option value="">Elija una opcion</option>
-									<option value="RECAUDADOR">RECAUDADOR</option>
-									<option value="INFORMACIONES">INFORMACIONES</option>
-									<option value="PLATAFORMA">PLATAFORMA</option>
-									<option value="TECNICO">TECNICO</option>
+									@foreach ($cargo as $item)
+										<option value="{{ $item->id }}">{{ $item->cargo }}</option>
+									@endforeach
 								</select>
 								<span class="help-block">{{ $errors->first('cargo') }}</span>
 							</div>
@@ -219,7 +215,7 @@
 		$('#datepicker').datepicker({
 			autoclose: true,
 			language: 'es',
-			format: 'yyyy/mm/dd',
+			format: 'yyyy-mm-dd',
 		});
 		
 		$( "#sucursal" ).change(function() {
