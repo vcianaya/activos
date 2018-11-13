@@ -97,7 +97,7 @@
 						<h3 class="box-title">Usuarios Registrados</h3>
 					</div>
 					<!-- /.box-header -->
-					<div class="box-body">
+					<div class="box-body table-responsive">
 						<table id="users-table" class="table table-bordered table-striped table-hover" align="center">
 							<thead>
 								<tr>

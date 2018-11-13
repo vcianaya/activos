@@ -10,7 +10,7 @@
 	<section class="content-header">
 		<h1>
 			Servicio de Impuestos Nacionales
-			<small>registro de funcionarios</small>
+			<small>editar funcionarios</small>
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -21,7 +21,7 @@
 	<section class="content">
 		<div class="row">
 			<div class="col-md-6">
-				<div class="box box-primary box-solid">
+				<div class="box box-warning box-solid">
 					<div class="box-header with-border">
 						<h3 class="box-title">Datos del personales funcionario</h3>
 					</div>
@@ -30,7 +30,7 @@
 						<div class="box-body">
 							<div class="form-group {{ $errors->has('ci')?'has-error':'' }}">
 								<label class="control-label">CI <i class="required">*</i></label>
-								<input type="text" value="{{ old('ci') }}" name="ci" class="form-control" placeholder="Cedula de identidad">
+								<input type="text" value="{{ $funcionario->ci }}" name="ci" class="form-control" placeholder="Cedula de identidad">
 								<span class="help-block">{{ $errors->first('ci') }}</span>
 							</div>
 
@@ -38,34 +38,34 @@
 								<label class="control-label">Expedido <i class="required">*</i></label>
 								<select class="form-control" name="expedido">
 									<option value="">Elija una opcion</option>
-									<option value="LP" {{ (old('expedido') == 'LP')?'selected':'' }}>LA PAZ</option>
-									<option value="OR" {{ (old('expedido') == 'OR')?'selected':'' }}>ORURO</option>
-									<option value="CB" {{ (old('expedido') == 'CB')?'selected':'' }}>COCHABAMBA</option>
-									<option value="PT" {{ (old('expedido') == 'PT')?'selected':'' }}>POTOSI</option>
-									<option value="SC" {{ (old('expedido') == 'SC')?'selected':'' }}>SANTA CRUZ</option>
-									<option value="TJ" {{ (old('expedido') == 'TJ')?'selected':'' }}>TARIJA</option>
-									<option value="BN" {{ (old('expedido') == 'BN')?'selected':'' }}>BENI</option>
-									<option value="PA" {{ (old('expedido') == 'PA')?'selected':'' }}>PANDO</option>
-									<option value="CH" {{ (old('expedido') == 'CH')?'selected':'' }}>CHUQUISACA</option>
+									<option value="LP" {{ ($funcionario->expedido == 'LP')?'selected':'' }}>LA PAZ</option>
+									<option value="OR" {{ ($funcionario->expedido == 'OR')?'selected':'' }}>ORURO</option>
+									<option value="CB" {{ ($funcionario->expedido == 'CB')?'selected':'' }}>COCHABAMBA</option>
+									<option value="PT" {{ ($funcionario->expedido == 'PT')?'selected':'' }}>POTOSI</option>
+									<option value="SC" {{ ($funcionario->expedido == 'SC')?'selected':'' }}>SANTA CRUZ</option>
+									<option value="TJ" {{ ($funcionario->expedido == 'TJ')?'selected':'' }}>TARIJA</option>
+									<option value="BN" {{ ($funcionario->expedido == 'BN')?'selected':'' }}>BENI</option>
+									<option value="PA" {{ ($funcionario->expedido == 'PA')?'selected':'' }}>PANDO</option>
+									<option value="CH" {{ ($funcionario->expedido == 'CH')?'selected':'' }}>CHUQUISACA</option>
 								</select>
 								<span class="help-block">{{ $errors->first('expedido') }}</span>
 							</div>
 							
 							<div class="form-group {{ $errors->has('nombre')?'has-error':'' }}">
 								<label class="control-label">Nombre <i class="required">*</i></label>
-								<input type="text" value="{{ old('nombre') }}" name="nombre" class="form-control" placeholder="Ej. Selem">
+								<input type="text" value="{{ $funcionario->nombre }}" name="nombre" class="form-control" placeholder="Ej. Selem">
 								<span class="help-block">{{ $errors->first('nombre') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('apellidoPaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido paterno <i class="required">*</i></label>
-								<input type="text" value="{{ old('apellidoPaterno') }}" name="apellidoPaterno" class="form-control" placeholder="Ej. Luna">
+								<input type="text" value="{{ $funcionario->ap_paterno }}" name="apellidoPaterno" class="form-control" placeholder="Ej. Luna">
 								<span class="help-block">{{ $errors->first('apellidoPaterno') }}</span>
 							</div>
 
 							<div class="form-group {{ $errors->has('apellidoMaterno')?'has-error':'' }}">
 								<label class="control-label">Apellido materno <i class="required">*</i></label>
-								<input type="text" value="{{ old('apellidoMaterno') }}" name="apellidoMaterno" class="form-control">
+								<input type="text" value="{{ $funcionario->ap_materno }}" name="apellidoMaterno" class="form-control">
 								<span class="help-block">{{ $errors->first('apellidoMaterno') }}</span>
 							</div>
 
@@ -75,7 +75,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" class="form-control pull-right" id="datepicker" name="fechaNacimiento">
+									<input type="text" value="{{ $funcionario->fec_nac }}" class="form-control pull-right" id="datepicker" name="fechaNacimiento">
 								</div>
 								<span class="help-block">{{ $errors->first('fechaNacimiento') }}</span>
 							</div>
@@ -84,15 +84,15 @@
 								<label class="control-label">Genero <i class="required">*</i></label>
 								<select class="form-control" name="genero">
 									<option value="">Elija una opcion</option>
-									<option value="MASCULINO" {{ (old('genero') == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
-									<option value="FEMENINO" {{ (old('genero') == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
+									<option value="MASCULINO" {{ ($funcionario->genero == 'MASCULINO')?'selected':'' }}>MASCULINO</option>
+									<option value="FEMENINO" {{ ($funcionario->genero == 'FEMENINO')?'selected':'' }}>FEMENINO</option>
 								</select>
 								<span class="help-block">{{ $errors->first('genero') }}</span>
-							</div>	
+							</div>  
 						</div>
 					</div>
 
-					<div class="box box-primary box-solid">
+					<div class="box box-warning box-solid">
 						<div class="box-header with-border">
 							<h3 class="box-title">Direccion donde vive el funcionario</h3>
 						</div>
@@ -101,51 +101,51 @@
 								<label class="control-label">Departamento <i class="required">*</i></label>
 								<select class="form-control" name="departamento">
 									<option value="">Elija una opcion</option>
-									<option value="LA PAZ" {{ (old('departamento') == 'LA PAZ')?'selected':'' }}>LA PAZ</option>
-									<option value="ORURO" {{ (old('departamento') == 'ORURO')?'selected':'' }}>ORURO</option>
-									<option value="COCHABAMBA" {{ (old('departamento') == 'COCHABAMBA')?'selected':'' }}>COCHABAMBA</option>
-									<option value="POTOSI" {{ (old('departamento') == 'POTOSI')?'selected':'' }}>POTOSI</option>
-									<option value="SANTA CRUZ" {{ (old('departamento') == 'SANTA CRUZ')?'selected':'' }}>SANTA CRUZ</option>
-									<option value="TARIJA" {{ (old('departamento') == 'TARIJA')?'selected':'' }}>TARIJA</option>
-									<option value="BENI" {{ (old('departamento') == 'BENI')?'selected':'' }}>BENI</option>
-									<option value="PANDO" {{ (old('departamento') == 'PANDO')?'selected':'' }}>PANDO</option>
-									<option value="CHUQUISACA" {{ (old('departamento') == 'CHUQUISACA')?'selected':'' }}>CHUQUISACA</option>
+									<option value="LA PAZ" {{ ($funcionario->departamento == 'LA PAZ')?'selected':'' }}>LA PAZ</option>
+									<option value="ORURO" {{ ($funcionario->departamento == 'ORURO')?'selected':'' }}>ORURO</option>
+									<option value="COCHABAMBA" {{ ($funcionario->departamento == 'COCHABAMBA')?'selected':'' }}>COCHABAMBA</option>
+									<option value="POTOSI" {{ ($funcionario->departamento == 'POTOSI')?'selected':'' }}>POTOSI</option>
+									<option value="SANTA CRUZ" {{ ($funcionario->departamento == 'SANTA CRUZ')?'selected':'' }}>SANTA CRUZ</option>
+									<option value="TARIJA" {{ ($funcionario->departamento == 'TARIJA')?'selected':'' }}>TARIJA</option>
+									<option value="BENI" {{ ($funcionario->departamento == 'BENI')?'selected':'' }}>BENI</option>
+									<option value="PANDO" {{ ($funcionario->departamento == 'PANDO')?'selected':'' }}>PANDO</option>
+									<option value="CHUQUISACA" {{ ($funcionario->departamento == 'CHUQUISACA')?'selected':'' }}>CHUQUISACA</option>
 								</select>
 								<span class="help-block">{{ $errors->first('departamento') }}</span>
 							</div>
 							
 							<div class="form-group {{ $errors->has('ciudad')?'has-error':'' }}">
 								<label class="control-label">Ciudad <i class="required">*</i></label>
-								<input type="text" value="{{ old('ciudad') }}" name="ciudad" class="form-control" placeholder="Ej. El Alto">
+								<input type="text" value="{{ $funcionario->ciudad }}" name="ciudad" class="form-control" placeholder="Ej. El Alto">
 								<span class="help-block">{{ $errors->first('ciudad') }}</span>
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">Zona</label>
-								<input type="text" value="{{ old('zona') }}" name="zona" class="form-control" placeholder="Ej. Satelite">
+								<input type="text" value="{{ $funcionario->zona }}" name="zona" class="form-control" placeholder="Ej. Satelite">
 							</div>
 							<div class="form-group">
 								<label class="control-label">Calle </label>
-								<input type="text" value="{{ old('calle') }}" name="calle" class="form-control">
+								<input type="text" value="{{ $funcionario->calle }}" name="calle" class="form-control">
 							</div>
 
 							<div class="form-group">
 								<label>Nro. Puerta:</label>
-								<input type="number" class="form-control" name="nro_puerta">
+								<input type="number" value="{{ $funcionario->nro_puerta }}" class="form-control" name="nro_puerta">
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="col-md-6">
-					<div class="box box-primary box-solid">
+					<div class="box box-warning box-solid">
 						<div class="box-header with-border">
 							<h3 class="box-title">Datos generales del funcionario</h3>
 						</div>
 						<div class="box-body">
 							<div class="form-group">
 								<label class="control-label">Nro. Telefono</label>
-								<input type="number" value="{{ old('telefono') }}" name="telefono" class="form-control" placeholder="Ej. El Alto">
+								<input type="number" value="{{ $funcionario->telefono }}" name="telefono" class="form-control" placeholder="Ej. El Alto">
 							</div>
 							
 							<div class="form-group {{ $errors->has('celular')?'has-error':'' }}">
@@ -156,7 +156,7 @@
 
 							<div class="form-group">
 								<label class="control-label">Email</label>
-								<input type="email" value="{{ old('email') }}" name="email" class="form-control" placeholder="Ej. selen@gmail.com">
+								<input type="email" value="{{ $funcionario->email }}" name="email" class="form-control" placeholder="Ej. selen@gmail.com">
 							</div>
 
 							<div class="form-group {{ $errors->has('sucursal')?'has-error':'' }}">
@@ -164,7 +164,7 @@
 								<select id="sucursal" class="form-control" name="sucursal">
 									<option value="">Elija una opcion</option>
 									@foreach ($sucursal as $item)
-										<option value="{{ $item->id }}" {{ (old('sucursal') ==  $item->id )?'selected':'' }}>{{ $item->nombre }}</option>
+										<option value="{{ $item->id }}" {{ ($funcionario->sucursal ==  $item->id )?'selected':'' }}>{{ $item->nombre }}</option>
 									@endforeach
 								</select>
 								<span class="help-block">{{ $errors->first('sucursal') }}</span>
@@ -196,7 +196,7 @@
 							</div>
 						</div>
 						<div class="box-footer">
-							<button id="submit-btn" type="submit" class="btn btn-primary pull-right">REGISTRAR</button>
+							<button id="submit-btn" type="submit" class="btn btn-warning pull-right">ACTUALIZAR DATOS</button>
 						</div>
 					</div>
 				</form>
@@ -212,6 +212,17 @@
 <script src="{{ url('template/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$.ajax({
+				url: "{{ url('get_areas_select2') }}/"+{{ $funcionario->sucursal }},
+				success:function(response){
+					response.data.find(function(element) {
+						if (element.id == {{ $funcionario->area }}) { element.selected = true} 
+					});
+					$('.select2').empty();
+					$('.select2').select2({data: response.data});
+				}
+			});
+
 		$('#datepicker').datepicker({
 			autoclose: true,
 			language: 'es',
@@ -223,7 +234,6 @@
 			$.ajax({
 				url: "{{ url('get_areas_select2') }}/"+id_sucursal,
 				success:function(response){
-					console.log(response.data);
 					$('.select2').empty();
 					$('.select2').select2({data: response.data});
 				}

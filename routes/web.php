@@ -3,7 +3,7 @@
 Auth::routes();
 
 Route::get('/', function () {
-    return view('principal');
+		return view('principal');
 });
 
 // LOGICA DE USUSARIOS
@@ -18,7 +18,8 @@ Route::get('restore_user/{id}','UsuarioController@restore_user');
 Route::get('register_funcionario','FuncionarioController@register_funcionario');
 Route::get('get_areas_select2/{id_sucursal}','FuncionarioController@get_areas_select2');
 Route::post('save_funcionario','FuncionarioController@save_funcionario');
-
+Route::get('list_funcionarios','FuncionarioController@list_funcionarios');
+Route::get('editar_funcionario/{id_funcionario}','FuncionarioController@editar_funcionario');
 // LOGICA DE SUCURSALES
 Route::get('registrar_sucursal','SucursalController@registrar_sucursal');
 Route::post('save_sucursal','SucursalController@save_sucursal');
@@ -41,3 +42,4 @@ Route::get('edit_almacen/{id_almacen}','SucursalController@edit_almacen');
 Route::post('update_almacen','SucursalController@update_almacen');
 
 Route::get('/home', 'HomeController@index')->name('home');
+// DATA TABLES

@@ -68,9 +68,20 @@ class FuncionarioController extends Controller
 		Session::flash('success','Funcionario Creado');
 		return back();
 	}
-
+	public function editar_funcionario($id_funcionario)
+	{
+		$funcionario = Funcionario::find($id_funcionario);
+		$sucursal = Sucursal::where('estado',1)->get();
+		$cargo = Cargo::all();
+		return view('funcionarios.editar_funcionario',['funcionario'=>$funcionario, 'sucursal'=>$sucursal, 'cargo'=>$cargo]);
+	}
 	public function list_funcionarios()
 	{
-		return view('funcionarios.listar_funcionarios');
+		$funcionarios = Funcionario::join('sucursal', 'sucursal.id', '=', 'funcionario.sucursal')
+		->join('cargo', 'cargo.id','=','funcionario.cargo')
+		->join('area', 'area.id','=','funcionario.area')
+		->select('funcionario.id','funcionario.estado', 'funcionario.nombre','funcionario.ap_paterno','funcionario.ap_materno','funcionario.fec_nac','funcionario.departamento','funcionario.ciudad','funcionario.celular','area.nombre as area','cargo.cargo','sucursal.nombre as sucursal','funcionario.foto')
+		->get();
+		return view('funcionarios.listar_funcionarios',['funcionarios'=>$funcionarios]);
 	}
 }
