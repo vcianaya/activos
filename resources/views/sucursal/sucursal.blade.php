@@ -353,7 +353,7 @@
 						success: function (result) {
 							$("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
 							$("#almacen_descripcion").closest('div').removeClass('has-error').find('.help-block').text('');
-							table_area.ajax.reload();
+							table_almacen.ajax.reload();
 							modal.modal('hide');
 							notify(result.type, result.icon, result.message);
 							$('#frm_almacen')[0].reset();

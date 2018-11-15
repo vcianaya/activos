@@ -22,6 +22,8 @@ class EquipoTable extends Migration
 			$table->string('fecha_ingreso')->nullable();
 			$table->integer('categoria')->nullable()->unsigned();
 			$table->foreign('categoria')->references('id')->on('categoria')->onDelete('cascade');
+      $table->integer('almacen')->nullable()->unsigned();
+      $table->foreign('almacen')->references('id')->on('almacen')->onDelete('cascade');
 			$table->timestamps();
 		});
 	}

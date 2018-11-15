@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Session;
 use Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 // MODELS
 use App\Sucursal;
 use App\Area;
@@ -74,6 +75,73 @@ class FuncionarioController extends Controller
 		$sucursal = Sucursal::where('estado',1)->get();
 		$cargo = Cargo::all();
 		return view('funcionarios.editar_funcionario',['funcionario'=>$funcionario, 'sucursal'=>$sucursal, 'cargo'=>$cargo]);
+	}
+
+	public function update_funcionario(Request $request)
+	{
+		$funcionario = Funcionario::find($request->id);
+		if ($request->ci != ''){
+			$funcionario->ci = $request->ci;
+		}
+		if ($request->expedido != ''){
+			$funcionario->expedido = $request->expedido;
+		}
+		if ($request->nombre != ''){
+			$funcionario->nombre = $request->nombre;
+		}
+		if ($request->apellidoPaterno != ''){
+			$funcionario->ap_paterno = $request->apellidoPaterno;
+		}
+		if ($request->apellidoMaterno != ''){
+			$funcionario->ap_materno = $request->apellidoMaterno;
+		}
+		if ($request->fechaNacimiento != ''){
+			$funcionario->fec_nac = $request->fechaNacimiento;
+		}
+		if ($request->genero != ''){	
+			$funcionario->genero = $request->genero;
+		}
+		if ($request->departamento != ''){
+			$funcionario->departamento = $request->departamento;
+		}
+		if ($request->ciudad != ''){
+			$funcionario->ciudad = $request->ciudad;
+		}
+		if ($request->zona != ''){
+			$funcionario->zona = $request->zona;
+		}
+		if ($request->calle != ''){	
+			$funcionario->calle = $request->calle;
+		}
+		if ($request->nro_puerta != ''){	
+			$funcionario->nro_puerta = $request->nro_puerta;
+		}
+		if ($request->telefono != ''){
+			$funcionario->telefono = $request->telefono;
+		}
+		if ($request->celular != ''){
+			$funcionario->celular = $request->celular;
+		}
+		if ($request->email != ''){
+			$funcionario->email = $request->email;
+		}
+		if (!is_null($request->file('foto'))) {
+			Storage::delete($funcionario->foto);
+			$funcionario->foto = $request->file('foto')->store('foto_funcionario');
+		}
+		$funcionario->estado = 1;
+		if ($request->sucursal != ''){
+			$funcionario->sucursal = $request->sucursal;
+		}
+		if ($request->area != ''){
+			$funcionario->area = $request->area;
+		}
+		if ($request->cargo != ''){
+			$funcionario->cargo = $request->cargo;
+		}
+		$funcionario->save();
+		Session::flash('success','Datos Actualizados');
+		return back();
 	}
 	public function list_funcionarios()
 	{

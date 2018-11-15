@@ -20,6 +20,7 @@ Route::get('get_areas_select2/{id_sucursal}','FuncionarioController@get_areas_se
 Route::post('save_funcionario','FuncionarioController@save_funcionario');
 Route::get('list_funcionarios','FuncionarioController@list_funcionarios');
 Route::get('editar_funcionario/{id_funcionario}','FuncionarioController@editar_funcionario');
+Route::post('update_funcionario','FuncionarioController@update_funcionario');
 // LOGICA DE SUCURSALES
 Route::get('registrar_sucursal','SucursalController@registrar_sucursal');
 Route::post('save_sucursal','SucursalController@save_sucursal');

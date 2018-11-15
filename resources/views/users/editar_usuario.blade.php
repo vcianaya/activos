@@ -81,7 +81,7 @@
 								<p class="help-block">Foto del usuario (png,jpg)</p>
 							</div>
 
-							<div class="form-group {{ $errors->has('password')?'has-error':'' }} col-md-7">
+							<div class="form-group col-md-7">
 								<img src="{{ URL::asset('storage/'.$user->foto) }}" width="150rem" height="150rem" class="pull-right">
 							</div>
 

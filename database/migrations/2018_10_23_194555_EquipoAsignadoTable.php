@@ -10,8 +10,6 @@ class EquipoAsignadoTable extends Migration
 	{
 		Schema::create('equipo_asignado', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('almacen')->nullable()->unsigned();
-			$table->foreign('almacen')->references('id')->on('almacen')->onDelete('cascade');
 			$table->integer('equipo')->nullable()->unsigned();
 			$table->foreign('equipo')->references('id')->on('equipo')->onDelete('cascade');
 			$table->integer('funcionario')->nullable()->unsigned();

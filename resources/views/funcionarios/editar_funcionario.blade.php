@@ -25,8 +25,9 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Datos del personales funcionario</h3>
 					</div>
-					<form role="form" method="post" enctype="multipart/form-data" action="{{ url('save_funcionario') }}">
+					<form role="form" method="post" enctype="multipart/form-data" action="{{ url('update_funcionario') }}">
 						{{ csrf_field() }}
+						<input type="hidden" value="{{ $funcionario->id }}" name="id">
 						<div class="box-body">
 							<div class="form-group {{ $errors->has('ci')?'has-error':'' }}">
 								<label class="control-label">CI <i class="required">*</i></label>
@@ -182,17 +183,21 @@
 								<select class="form-control" name="cargo">
 									<option value="">Elija una opcion</option>
 									@foreach ($cargo as $item)
-										<option value="{{ $item->id }}">{{ $item->cargo }}</option>
+										<option value="{{ $item->id }}" {{ ($funcionario->cargo == $item->id)?'selected':'' }}>{{ $item->cargo }}</option>
 									@endforeach
 								</select>
 								<span class="help-block">{{ $errors->first('cargo') }}</span>
 							</div>
 
-							<div class="form-group {{ $errors->has('foto')?'has-error':'' }}">
+							<div class="form-group {{ $errors->has('foto')?'has-error':'' }} col-md-5">
 								<label class="control-label">Foto <i class="required">*</i></label>
 								<input type="file" name="foto">
 								<p class="help-block">Foto del funcionario (png,jpg)</p>
 								<span class="help-block">{{ $errors->first('foto') }}</span>
+							</div>
+
+							<div class="form-group col-md-7">
+								<img src="{{ URL::asset('storage/'.$funcionario->foto) }}" width="150rem" height="150rem" class="pull-right">
 							</div>
 						</div>
 						<div class="box-footer">
