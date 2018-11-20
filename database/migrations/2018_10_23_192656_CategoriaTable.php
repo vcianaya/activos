@@ -10,8 +10,9 @@ class CategoriaTable extends Migration
 	{
 		Schema::create('categoria', function (Blueprint $table) {
 			$table->increments('id');
+      $table->string('codigo')->nullable();
 			$table->string('nombre')->nullable();
-      $table->date('vida_util');
+      $table->integer('vida_util');
 			$table->text('foto')->nullable();
 		});
 	}

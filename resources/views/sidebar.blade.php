@@ -72,7 +72,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="{{ url('registrar_sucursal') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
+          <li><a href="{{ url('crear_equipo') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
         </ul>
       </li>
 

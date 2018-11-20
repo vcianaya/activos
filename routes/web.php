@@ -41,6 +41,9 @@ Route::post('create_almacen','SucursalController@create_almacen');
 Route::get('get_almacenes/{id_sucursal}','SucursalController@get_almacenes');
 Route::get('edit_almacen/{id_almacen}','SucursalController@edit_almacen');
 Route::post('update_almacen','SucursalController@update_almacen');
-
+// CREACION DE EQUIPOS COMPUTACIONALES
+Route::get('crear_equipo','EquipoController@registrar_equipo');
+Route::post('save_categoria','EquipoController@save_categoria');
+Route::get('get_categorias','EquipoController@get_categorias');
 Route::get('/home', 'HomeController@index')->name('home');
 // DATA TABLES

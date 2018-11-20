@@ -66,6 +66,10 @@ return [
 				'driver' => 'local',
 				'root'   => base_path('public/storage/foto_sucursal'),
 			],
+      'foto_categoria' => [
+        'driver' => 'local',
+        'root'   => base_path('public/storage/foto_categoria'),
+      ],
 			's3' => [
 				'driver' => 's3',
 				'key' => env('AWS_KEY'),
