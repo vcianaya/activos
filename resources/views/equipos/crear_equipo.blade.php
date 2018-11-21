@@ -41,7 +41,7 @@
 
 								<div class="form-group">
 									<label class="control-label">Categoria <i class="required">*</i></label>
-									<select id="categoria" class="form-control" name="categoria">
+									<select  class="form-control">
 										<option value="">Elija una opcion</option>
 										@foreach ($categoria as $item)
 										<option codigo="{{ $item->codigo }}" value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -52,7 +52,7 @@
 								
 								<div class="form-group">
 									<label class="control-label">Sucursal <i class="required">*</i></label>
-									<select id="sucursal" class="form-control" name="sucursal">
+									<select class="form-control">
 										<option value="">Elija una opcion</option>
 										@foreach ($sucursal as $item)
 										<option value="{{ $item->id }}">{{ $item->nombre }}</option>
