@@ -64,7 +64,19 @@
 				</ul>
 			</li>
 
-      <li class="treeview active">
+			<li class="treeview active">
+				<a href="#">
+					<i class="fa fa-cubes"></i> <span>CATEGORIAS</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{{ url('registrar_categoria') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
+				</ul>
+			</li>
+
+			<li class="treeview active">
         <a href="#">
           <i class="fa fa-tv"></i> <span>EQUIPOS</span>
           <span class="pull-right-container">
@@ -72,7 +84,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="{{ url('crear_equipo') }}"><i class="fa fa-circle-o"></i> Administrar</a></li>
+          <li><a href="{{ url('registrar_equipo') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
         </ul>
       </li>
 

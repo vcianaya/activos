@@ -202,9 +202,10 @@
 				modal.find('.modal').addClass("bs-example-modal-sm");
 				modal.find('.modal-dialog').addClass("modal-sm");
 				modal.find('h4').text('CREAR AREA');
-				modal.find('p').text('Esta seguro de crear el area');
 				modal.find('.btn-default').text('Cancelar');
 				modal.find('.btn-primary').text('Aceptar');
+        body = modal.find('.modal-body');
+        body.html('Esta seguro de crear el area..?');
 				modal.find('.btn-primary').off().on('click',function(e){
 					e.preventDefault();
 					$.ajax({
@@ -245,7 +246,6 @@
 				modal.find('.modal').removeClass("bs-example-modal-sm");
 				modal.find('.modal-dialog').removeClass("modal-sm");
 				modal.find('h4').text('Editar Area');
-				modal.find('p').text('');
 				modal.find('.btn-default').text('Cancelar');
 				modal.find('.btn-primary').text('Actualizar');
 				id_sucursal = $(this).closest('tr').attr('id');
@@ -335,7 +335,8 @@
 				modal.find('.modal').addClass("bs-example-modal-sm");
 				modal.find('.modal-dialog').addClass("modal-sm");
 				modal.find('h4').text('CREAR ALMACEN');
-				modal.find('p').text('Esta seguro de crear el almacen');
+				body = modal.find('.modal-body');
+        body.html('Esta seguro de crear el almacen..?');
 				modal.find('.btn-default').text('Cancelar');
 				modal.find('.btn-primary').text('Aceptar');
 				modal.find('.btn-primary').off().on('click',function(e){
