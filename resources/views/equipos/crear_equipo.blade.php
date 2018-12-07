@@ -25,7 +25,7 @@
 
 				<div class="box box-primary collapsed-box">
 					<div class="box-header with-border">
-						<h3 class="box-title">REGISTRO MASIVO VIA EXCEL</h3>
+						<h3 class="box-title">REGISTRO DE EQUIPOS MASIVO VIA EXCEL</h3>
 
 						<div class="box-tools pull-right">
 							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -35,13 +35,13 @@
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
-						<form method="post" enctype="multipart/form-data">
+						<form id="carga_masiva" method="post" enctype="multipart/form-data">
 							{{ csrf_field() }}
 							<div class="box-body">
 
 								<div class="form-group">
 									<label class="control-label">Categoria <i class="required">*</i></label>
-									<select  class="form-control">
+									<select  class="form-control" id="id_categoria" name="id_categoria">
 										<option value="">Elija una opcion</option>
 										@foreach ($categoria as $item)
 										<option codigo="{{ $item->codigo }}" value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -52,31 +52,31 @@
 								
 								<div class="form-group">
 									<label class="control-label">Sucursal <i class="required">*</i></label>
-									<select class="form-control">
+									<select class="form-control" id="sucursal_m" name="id_sucursal">
 										<option value="">Elija una opcion</option>
 										@foreach ($sucursal as $item)
 										<option value="{{ $item->id }}">{{ $item->nombre }}</option>
 										@endforeach
 									</select>
-									<span class="help-block">{{ $errors->first('sucursal') }}</span>
+									<span class="help-block"></span>
 								</div>
 
 								<div class="form-group">
 									<label class="control-label">Almacen <i class="required">*</i></label>
-									<select class="form-control select2" style="width: 100%;" name="almacen" id="almacen">
+									<select class="form-control select_almacen" id="id_almacen" name="id_almacen" style="width: 100%;">
 									</select>
 									<span class="help-block"></span>
 								</div>
 								
 								<div class="form-group">
-                  <label for="exampleInputFile">Archivo excel</label>
-                  <input type="file" id="exampleInputFile">
-                </div>
+									<label for="exampleInputFile">Archivo excel</label>
+									<input type="file" id="file_excel" name="file_excel">
+								</div>
 								
 
 							</div>
 							<div class="box-footer">
-								<button id="submit-btn" type="submit" class="btn btn-primary">INSERTAR TODO</button>
+								<button id="submit-btn-excel" type="submit" class="btn btn-primary">INSERTAR TODO</button>
 							</div>
 						</form>
 					</div>
@@ -91,7 +91,6 @@
 						<form id="form_equipo" method="post" enctype="multipart/form-data">
 							{{ csrf_field() }}
 							<div class="box-body">
-
 								<div class="form-group">
 									<label class="control-label">Categoria <i class="required">*</i></label>
 									<select id="categoria" class="form-control" name="categoria">
@@ -147,7 +146,7 @@
 										</div>
 										<input type="text" class="form-control pull-right" id="datepicker" name="datepicker">
 									</div>
-									<span class="help-block"></span>
+									<span style="color:red" class="help-block" id="err-datepicker"></span>
 								</div>
 								
 								<div class="form-group">
@@ -158,7 +157,7 @@
 										<option value="{{ $item->id }}">{{ $item->nombre }}</option>
 										@endforeach
 									</select>
-									<span class="help-block">{{ $errors->first('sucursal') }}</span>
+									<span class="help-block"></span>
 								</div>
 								
 								<div class="form-group">
@@ -176,7 +175,7 @@
 
 							</div>
 							<div class="box-footer">
-								<button id="submit-btn" type="submit" class="btn btn-primary">CREAR</button>
+								<button id="submit-btn-equipo" type="submit" class="btn btn-primary">CREAR</button>
 							</div>
 						</form>
 					</div>
@@ -199,6 +198,7 @@
 									<th>DESCRIPCION</th>
 									<th>SUCURSAL</th>
 									<th>ALMACEN</th>
+									<th>ACCION</th>
 								</tr>
 							</thead>
 							<tfoot>
@@ -211,6 +211,7 @@
 									<th>DESCRIPCION</th>
 									<th>SUCURSAL</th>
 									<th>ALMACEN</th>S
+									<th>ACCION</th>S
 								</tr>
 							</tfoot>
 						</table>
@@ -228,11 +229,78 @@
 <script src="{{ url('template/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		// CARGAS MASIVAS
+		$( "#sucursal_m" ).change(function() {
+			id_sucursal = $('#sucursal_m').val();
+			$.ajax({
+				url: "{{ url('get_almacenes_select2') }}/"+id_sucursal,
+				success:function(response){
+					$('.select_almacen').empty();
+					$('.select_almacen').select2({data: response.data});
+				}
+			});
+		});
+
+			$("#submit-btn-excel").click(function(e) {
+			e.preventDefault();
+			modal.find('.modal').addClass("bs-example-modal-sm");
+			modal.find('.modal-dialog').addClass("modal-sm");
+			modal.find('h4').text('CARGA MASIVA');
+			body = modal.find('.modal-body');
+			body.html('Esta seguro de insertar los equipos..?');
+			modal.find('.btn-default').text('Cancelar');
+			modal.find('.btn-primary').text('Aceptar');
+			modal.find('.btn-primary').off().on('click',function(e){
+				e.preventDefault();
+				$.ajax({
+					url: '{{ url('registro_masivo_equipos') }}',
+					type: 'POST',
+					data: new FormData($("#carga_masiva")[0]),
+					contentType: false,
+					cache: false,
+					processData: false,
+					success: function (result) {
+						notify(result.type, result.icon, result.message);
+						$("#categoria").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#codigo").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#marca").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#modelo").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#datepicker").closest('div').removeClass('has-error');
+						$('#err-datepicker').text('');
+						$("#sucursal").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
+						table_equipos.ajax.reload();
+						modal.modal('hide');
+						$('#carga_masiva')[0].reset();
+					},
+					error: function (error) {
+						error = error.responseJSON;
+						(error.id_categoria)?
+						$("#id_categoria").closest('div').addClass('has-error').find('.help-block').text(error.id_categoria[0]):
+						$("#id_categoria").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.id_sucursal)?
+						$("#id_sucursal").closest('div').addClass('has-error').find('.help-block').text(error.id_sucursal[0]):
+						$("#id_sucursal").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.id_almacen)?
+						$("#id_almacen").closest('div').addClass('has-error').find('.help-block').text(error.id_almacen[0]):
+						$("#id_almacen").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.modelo)?
+						$("#file_excel").closest('div').addClass('has-error').find('.help-block').text(error.file_excel[0]):
+						$("#file_excel").closest('div').removeClass('has-error').find('.help-block').text('');
+					}
+				})
+			});
+			modal.modal('show');
+		});
+
+
+		// REGISTRO EQUIPO
 		$('#datepicker').datepicker({
 			autoclose: true,
 			language: 'es',
 			format: 'yyyy-mm-dd',
 		});
+
 
 		$( "#categoria" ).change(function() {
 			id_categoria = $('#categoria').val();
@@ -242,7 +310,6 @@
 					$("#codigo").val(response.codigo);
 				}
 			});
-
 		});
 
 		$( "#sucursal" ).change(function() {
@@ -301,12 +368,14 @@
 			{ "data": "fecha_ingreso" },
 			{ "data": "descripcion" },
 			{ "data": "sucursal" },
-			{ "data": "almacen" }
+			{ "data": "almacen" },
+			{ "data": "accion" }
 			],
 		});
 
 		modal = $('#modal');
-		$("#submit-btn").click(function(e) {
+		//INSERTAR EQUIPO
+		$("#submit-btn-equipo").click(function(e) {
 			e.preventDefault();
 			modal.find('.modal').addClass("bs-example-modal-sm");
 			modal.find('.modal-dialog').addClass("modal-sm");
@@ -326,78 +395,107 @@
 					processData: false,
 					success: function (result) {
 						notify(result.type, result.icon, result.message);
-						$("#codigo").closest('div').removeClass('has-error').find('.help-block').text('');
 						$("#categoria").closest('div').removeClass('has-error').find('.help-block').text('');
-						$("#tiempo_vida_util").closest('div').removeClass('has-error').find('.help-block').text('');
-						$("#foto").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#codigo").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#marca").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#modelo").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#datepicker").closest('div').removeClass('has-error');
+						$('#err-datepicker').text('');
+						$("#sucursal").closest('div').removeClass('has-error').find('.help-block').text('');
+						$("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
 						table_equipos.ajax.reload();
 						modal.modal('hide');
-						$('#form_categoria')[0].reset();
+						$('#form_equipo')[0].reset();
 					},
 					error: function (error) {
 						error = error.responseJSON;
-						(error.codigo)?
-						$("#codigo").closest('div').addClass('has-error').find('.help-block').text(error.codigo[0]):
-						$("#codigo").closest('div').removeClass('has-error').find('.help-block').text('');
 						(error.categoria)?
 						$("#categoria").closest('div').addClass('has-error').find('.help-block').text(error.categoria[0]):
 						$("#categoria").closest('div').removeClass('has-error').find('.help-block').text('');
-						(error.tiempo_vida_util)?
-						$("#tiempo_vida_util").closest('div').addClass('has-error').find('.help-block').text(error.tiempo_vida_util[0]):
+						(error.codigo)?
+						$("#codigo").closest('div').addClass('has-error').find('.help-block').text(error.codigo[0]):
+						$("#codigo").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.marca)?
+						$("#marca").closest('div').addClass('has-error').find('.help-block').text(error.marca[0]):
 						$("#tiempo_vida_util").closest('div').removeClass('has-error').find('.help-block').text('');
-						(error.foto)?
-						$("#foto").closest('div').addClass('has-error').find('.help-block').text(error.foto[0]):
-						$("#foto").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.modelo)?
+						$("#modelo").closest('div').addClass('has-error').find('.help-block').text(error.modelo[0]):
+						$("#modelo").closest('div').removeClass('has-error').find('.help-block').text('');
+						if(error.datepicker){
+							$("#datepicker").closest('div').addClass('has-error');
+							$('#err-datepicker').text('El campo fecha de ingreso es requerido');
+						}else{
+							$("#datepicker").closest('div').removeClass('has-error');
+							$('#err-datepicker').text('');
+						}
+						(error.sucursal)?
+						$("#sucursal").closest('div').addClass('has-error').find('.help-block').text(error.sucursal[0]):
+						$("#sucursal").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.almacen)?
+						$("#almacen").closest('div').addClass('has-error').find('.help-block').text(error.almacen[0]):
+						$("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
 					}
 				})
 			});
 			modal.modal('show');
 		});
-// data: new FormData(body.find('#form_categoria_update'[0])),
-$("#categoria-table").on('click', '.edit-categoria', function (e) {
-	e.preventDefault();
-	modal.find('.modal').removeClass("bs-example-modal-sm");
-	modal.find('.modal-dialog').removeClass("modal-sm");
-	modal.find('h4').text('EDITAR CATEGORIA');
-	modal.find('.btn-default').text('Cancelar');
-	modal.find('.btn-primary').text('Actualizar');
-	id_categoria = $(this).closest('tr').attr('id');
-	$.ajax({
-		url: "{{ url('editar_categoria') }}/"+id_categoria,
-		success:function(response){
-			body = modal.find('.modal-body');
-			body.html(response);
-		}
-	});
-	modal.find('.btn-primary').off().on('click',function(e){
-		e.preventDefault();
-		$.ajax({
-			url: '{{ url('update_categoria') }}',
-			type: 'POST',
-			data: new FormData($("#form_categoria_update")[0]),
-			contentType: false,
-			cache: false,
-			processData: false,
-			success: function (result) {
-				notify(result.type, result.icon, result.message);
-				table_categoria.ajax.reload();
-				modal.modal('hide');
-				$("#form_categoria_update")[0].reset();
-			},
-			error: function (error) {
-				error = error.responseJSON;
-				(error.categoria)?
-				body.find('#categoria').closest('div').addClass('has-error').find('.help-block').text(error.categoria[0]):
-				body.find("#categoria").closest('div').removeClass('has-error').find('.help-block').text('');
-				(error.tiempo_vida_util)?
-				body.find("#tiempo_vida_util").closest('div').addClass('has-error').find('.help-block').text(error.tiempo_vida_util[0]):
-				body.find("#tiempo_vida_util").closest('div').removeClass('has-error').find('.help-block').text('');
-			}
-		})
-	});
-	modal.modal('show');
-});
-
+		table_equipos.on('click', '.edit-equipo', function (e) {
+			e.preventDefault();
+			modal.find('.modal').removeClass("bs-example-modal-sm");
+			modal.find('.modal-dialog').removeClass("modal-sm");
+			modal.find('h4').text('EDITAR EQUIPO');
+			modal.find('.btn-default').text('Cancelar');
+			modal.find('.btn-primary').text('Actualizar');
+			id_equipo = $(this).closest('tr').attr('id');
+			$.ajax({
+				url: "{{ url('editar_equipo') }}/"+id_equipo,
+				success:function(response){
+					body = modal.find('.modal-body');
+					body.html(response);
+				}
+			});
+			modal.find('.btn-primary').off().on('click',function(e){
+				e.preventDefault();
+				$.ajax({
+					url: '{{ url('update_equipo') }}',
+					type: 'POST',
+					data: new FormData($("#form_equipo_update")[0]),
+					contentType: false,
+					cache: false,
+					processData: false,
+					success: function (result) {
+						notify(result.type, result.icon, result.message);
+						table_equipos.ajax.reload();
+						modal.modal('hide');
+						$("#form_equipo_update")[0].reset();
+					},
+					error: function (error) {
+						error = error.responseJSON;
+						(error.categoria)?
+						body.find('#categoria').closest('div').addClass('has-error').find('.help-block').text(error.categoria[0]):
+						body.find("#categoria").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.marca)?
+						body.find('#marca').closest('div').addClass('has-error').find('.help-block').text(error.marca[0]):
+						body.find("#marca").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.modelo)?
+						body.find('#modelo').closest('div').addClass('has-error').find('.help-block').text(error.modelo[0]):
+						body.find("#modelo").closest('div').removeClass('has-error').find('.help-block').text('');
+						(error.almacen)?
+						body.find('#almacen').closest('div').addClass('has-error').find('.help-block').text(error.almacen[0]):
+						body.find("#almacen").closest('div').removeClass('has-error').find('.help-block').text('');
+						if(error.datepicker){
+							body.find('#datepicker').closest('div').addClass('has-error');
+							body.find('#err-datepicker').text('El campo fecha de ingreso es requerido');
+						}else{
+							body.find("#datepicker").closest('div').removeClass('has-error');
+							body.find('#err-datepicker').text('');
+						}
+					}
+				})
+			});
+			modal.modal('show');
+		});
+		//MODAL UPDATE
 })
 </script>
 @endsection

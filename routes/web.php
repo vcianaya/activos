@@ -53,5 +53,10 @@ Route::get('get_almacenes_select2/{id_sucursal}','EquipoController@get_almacenes
 Route::get('get_codigo_categoria/{id_categoria}','EquipoController@get_codigo_categoria');
 Route::post('save_equipo','EquipoController@save_equipo');
 Route::get('get_equipos','EquipoController@get_equipos');
+Route::get('editar_equipo/{id_equipo}','EquipoController@editar_equipo');
+Route::get('get_almacenes_sucursal/{id_sucursal}/{id_almacen}','EquipoController@get_almacenes_sucursal');
+Route::post('update_equipo','EquipoController@update_equipo');
+Route::post('registro_masivo_equipos','EquipoController@registro_masivo_equipos');
+
 Route::get('/home', 'HomeController@index')->name('home');
 // DATA TABLES
