@@ -77,21 +77,34 @@
 			</li>
 
 			<li class="treeview active">
-        <a href="#">
-          <i class="fa fa-tv"></i> <span>EQUIPOS</span>
-          <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
-        </a>
-        <ul class="treeview-menu">
-          <li><a href="{{ url('registrar_equipo') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
-        </ul>
-      </li>
+				<a href="#">
+					<i class="fa fa-tv"></i> <span>EQUIPOS</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{{ url('registrar_equipo') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
+				</ul>
+			</li>
 
-			<li class="header">LABELS</li>
+			<li class="treeview active">
+				<a href="#">
+					<i class="fa fa-sitemap"></i> <span>ADMINISTRACION DE ACTIVOS</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li>
+						<a href="{{ url('asignar_equipo') }}"><i class="fa fa-circle-o text-green"></i> Asignar</a></li>
+				</ul>
+			</li>
+
+			<li class="header">MOVIMIENTO DE ACTIVOS</li>
 			<li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
 			<li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-			<li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+			<li><a href="#"><i class="fa fa-circle-o text-green"></i> <span>Information</span></a></li>
 		</ul>
 	</section>
 	<!-- /.sidebar -->

@@ -77,6 +77,7 @@
 							</div>
 							<div class="box-footer">
 								<button id="submit-btn-excel" type="submit" class="btn btn-primary">INSERTAR TODO</button>
+                <a href="{{ url('descargar_formato') }}" class="btn btn-info pull-right"><i class="fa fa-file-excel-o"></i> DESCARGAR EXCEL</a>
 							</div>
 						</form>
 					</div>

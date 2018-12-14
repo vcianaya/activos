@@ -58,17 +58,21 @@ return [
 				'driver' => 'local',
 				'root'   => base_path('public/storage/foto_usuario'),
 			],
-      'foto_funcionario' => [
-        'driver' => 'local',
-        'root'   => base_path('public/storage/foto_funcionario'),
-      ],
+			'foto_funcionario' => [
+				'driver' => 'local',
+				'root'   => base_path('public/storage/foto_funcionario'),
+			],
 			'foto_sucursal' => [
 				'driver' => 'local',
 				'root'   => base_path('public/storage/foto_sucursal'),
 			],
-      'foto_categoria' => [
+			'foto_categoria' => [
+				'driver' => 'local',
+				'root'   => base_path('public/storage/foto_categoria'),
+			],
+			'excel' => [
         'driver' => 'local',
-        'root'   => base_path('public/storage/foto_categoria'),
+        'root'   => base_path('public/storage/excel'),
       ],
 			's3' => [
 				'driver' => 's3',
