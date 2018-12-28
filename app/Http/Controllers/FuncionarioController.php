@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Session;
+use PDF;
+use Carbon\Carbon;
+
 use Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +15,7 @@ use App\Sucursal;
 use App\Area;
 use App\Funcionario;
 use App\Cargo;
+use App\Equipo;
 class FuncionarioController extends Controller
 {
 	public function register_funcionario()
@@ -151,5 +155,136 @@ class FuncionarioController extends Controller
 		->select('funcionario.id','funcionario.estado', 'funcionario.nombre','funcionario.ap_paterno','funcionario.ap_materno','funcionario.fec_nac','funcionario.departamento','funcionario.ciudad','funcionario.celular','area.nombre as area','cargo.cargo','sucursal.nombre as sucursal','funcionario.foto')
 		->get();
 		return view('funcionarios.listar_funcionarios',['funcionarios'=>$funcionarios]);
+	}
+
+	public function get_activos_pdf($id_funcionario)
+	{
+		$funcionario =  Funcionario::join('sucursal','sucursal.id','=','funcionario.sucursal')
+		->join('cargo','cargo.id','=','funcionario.cargo')
+		->join('area','area.id','=','funcionario.area')
+		->select('funcionario.ci','funcionario.expedido','funcionario.nombre','funcionario.ap_paterno','funcionario.ap_materno','funcionario.fec_nac','funcionario.genero','funcionario.departamento','funcionario.ciudad','funcionario.zona','funcionario.calle','funcionario.nro_puerta','funcionario.celular','sucursal.nombre as sucursal','cargo.cargo','area.nombre as area')
+		->where('funcionario.id',$id_funcionario)
+		->first();
+		$equipos = Equipo::join('equipo_asignado','equipo.id','=','equipo_asignado.equipo')
+							->select('equipo.*')
+							->where('equipo_asignado.funcionario',$id_funcionario)
+							->get();
+
+		PDF::SetTitle('DETALLE FUNCIONARIO SIN');
+		PDF::SetSubject('Servicio de Impuestos Nacionales');
+		PDF::SetMargins(25, 15, 15);
+		
+		PDF::setHeaderCallback(function($pdf) {
+		 $pdf->Image(public_path('/pdf/impuestos.png'), 130, 10, 70, 10, 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		 $pdf->Image(public_path('/pdf/escudo.png'), 10, 10, 70, 10, 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		 $pdf->ln(18);
+		 $pdf->SetFont('helvetica', 'B', 12);
+		 $pdf->Cell(0, 10, 'SISTEMA DE ACTIVOS FIJOS', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		 $pdf->ln(6);
+		 $pdf->SetFont('helvetica', 'B', 11);
+		 $pdf->Cell(0, 10, 'DETALLE DE ACTIVOS DEL FUNCIONARIO', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		 $pdf->ln(5);
+		 $pdf->SetFont('helvetica', '', 10);
+		 $pdf->Cell(0, 10, 'Fecha y hora de impresion: '.Carbon::now()->format('Y-m-d H:s'), 0, false, 'C', 0, '', 0, false, 'M', 'M');
+	 });
+		
+		PDF::setFooterCallback(function($pdf){
+		 $pdf->SetY(-15);
+		 $pdf->SetFont('helvetica', 'I', 8);
+		 $pdf->Image(public_path('/pdf/bandera.jpg'), 10, 280, 190, 1.4, 'jpg', '', 'T', false, 100, '', false, false, 0, false, false, false);
+		 $pdf->ln(1);
+		 $pdf->Cell(0, 10, 'Page - '.$pdf->getAliasNumPage(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+		 $pdf->ln(1);
+		 $pdf->Cell(0, 10, 'Servicio de Impuestos Nacionales Tus Impuestos tu pais.', 0, false, 'L', 0, '', 0, false, 'T', 'M');
+	 });
+
+		PDF::AddPage();
+
+		// Colors, line width and bold font
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetDrawColor(0, 0, 0);
+		PDF::SetLineWidth(0.3);
+		PDF::ln(35);
+		PDF::SetFont('', 'B',10);
+		PDF::MultiCell(40,11, 'FUNCIONARIO', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(130,11, $funcionario->nombre.' '.$funcionario->ap_paterno.' '.$funcionario->ap_materno, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::ln();
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetFont('', 'B',10);
+		PDF::MultiCell(40,11, 'C.I.', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(50,11, $funcionario->ci, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::MultiCell(25,11, 'CELULAR', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(55,11, $funcionario->celular, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::ln();
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetDrawColor(0, 0, 0);
+		PDF::SetLineWidth(0.3);
+		PDF::SetFont('', 'B',10);
+		PDF::MultiCell(40,11, 'DIRECCION FUNCIONARIO', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(130,11, $funcionario->ciudad.' Z/ '.$funcionario->zona.' C/ '.$funcionario->calle.' /Nro. '.$funcionario->nro_puerta, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::ln();
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetDrawColor(0, 0, 0);
+		PDF::SetLineWidth(0.3);
+		PDF::SetFont('', 'B',10);
+		PDF::MultiCell(40,11, 'SUCURSAL', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(130,11, $funcionario->sucursal, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::ln();
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetFont('', 'B',10);
+		PDF::MultiCell(40,11, 'CARGO', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(50,11, $funcionario->cargo, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::MultiCell(25,11, 'AREA', 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0,0,0);
+		PDF::MultiCell(55,11, $funcionario->area, 1, 'C', 1, 0, '', '', true, 0, false, true, 11, 'M');
+		PDF::Ln();
+		PDF::Ln();
+
+		PDF::SetFillColor(8, 93, 178);
+		PDF::SetTextColor(255);
+		PDF::SetLineWidth(0.3);
+		PDF::SetFont('helvetica', 'B', 8);
+		// Header
+		PDF::Cell(20, 7, 'COD. SIAF', 1, 0, 'C', 1);
+		PDF::Cell(37, 7, 'MARCA', 1, 0, 'C', 1);
+		PDF::Cell(47, 7, 'NRO. SERIE', 1, 0, 'C', 1);
+		PDF::Cell(67, 7, 'DESCRIPCION', 1, 0, 'C', 1);
+		PDF::Ln();
+		// Color and font restoration
+		PDF::SetFillColor(255, 255, 255);
+		PDF::SetTextColor(0);
+		PDF::SetFont('');
+		foreach ($equipos as $item) {
+			PDF::MultiCell(20, 6, $item->codigo_siaf, 'LRB', 0, 'L', 0);
+			PDF::MultiCell(37, 6, $item->marca, 'LRB', 0, 'L', 0);
+			PDF::MultiCell(47, 6, $item->nro_serie, 'LRB', 0, 'L', 0);
+			PDF::MultiCell(67, 6, $item->descripcion, 'LRB', 0, 'C', 0);
+			PDF::Ln();
+		}
+		// PDF::Cell(array_sum($w), 0, '', 'T');
+
+		PDF::Output('reporte_activos.pdf');
 	}
 }

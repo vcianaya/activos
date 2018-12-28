@@ -97,7 +97,11 @@
 				</a>
 				<ul class="treeview-menu">
 					<li>
-						<a href="{{ url('asignar_equipo') }}"><i class="fa fa-circle-o text-green"></i> Asignar</a></li>
+						<a href="{{ url('asignar_equipo') }}"><i class="fa fa-circle-o text-green"></i> Asignar</a>
+					</li>
+					<li>
+						<a href="{{ url('devolver_activo') }}"><i class="fa fa-circle-o text-orange"></i> Devolver</a>
+					</li>
 				</ul>
 			</li>
 

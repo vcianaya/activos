@@ -69,7 +69,7 @@
 
 							<div class="form-group {{ $errors->has('email')?'has-error':'' }}">
 								<label class="control-label">Email <i class="required">*</i></label>
-								<input type="Email" value="{{ old('email') }}" name="email" class="form-control" placeholder="selem@gmail.com" readonly>
+								<input type="Email" value="{{ old('email') }}" name="email" class="form-control" placeholder="selem@gmail.com">
 								<span class="help-block">{{ $errors->first('email') }}</span>
 							</div>
 							<div class="form-group {{ $errors->has('password')?'has-error':'' }}">

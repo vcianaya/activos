@@ -51,6 +51,7 @@
 									<td><img src="{{ URL::asset('storage/'.$item->foto) }}" width="100rem" height="100rem"></td>
 									<td>
 										<div class="btn-group-vertical">
+                      <a type="button" class="btn btn-info btn-sm" href="{{ url('detalle_funcionario_activos/'.$item->id) }}" target="_blank">Reporte</a>
 											<a type="button" class="btn btn-warning btn-sm" href="{{ url('editar_funcionario/'.$item->id) }}">Editar</a>
 											@if ($item->estado == 1)
 											<a type="button" class="btn btn-danger btn-sm" href="{{ url('delete_user/'.$item->id) }}">Eliminar</a>

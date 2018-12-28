@@ -26,8 +26,8 @@ class UsuarioController extends Controller
 			'apellidoPaterno' => 'required',
 			'apellidoMaterno' => 'required',
 			'email' => 'required|unique:users',
-			'password' => 'required|min:5|confirmed',
-			'password_confirmation' => 'required|min:5',
+			'password' => 'required|min:5',
+			// 'password_confirmation' => 'required|min:5',
 			'foto' => 'required|mimes:jpeg,jpg,png'
 		]);
 

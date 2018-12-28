@@ -199,6 +199,7 @@
 									<th>DESCRIPCION</th>
 									<th>SUCURSAL</th>
 									<th>ALMACEN</th>
+                  <th>ASIGNADO A:</th>
 									<th>ACCION</th>
 								</tr>
 							</thead>
@@ -211,8 +212,9 @@
 									<th>FECHA INGRESO</th>
 									<th>DESCRIPCION</th>
 									<th>SUCURSAL</th>
-									<th>ALMACEN</th>S
-									<th>ACCION</th>S
+									<th>ALMACEN</th>
+                  <th>ASIGNADO A:</th>
+									<th>ACCION</th>
 								</tr>
 							</tfoot>
 						</table>
@@ -370,6 +372,7 @@
 			{ "data": "descripcion" },
 			{ "data": "sucursal" },
 			{ "data": "almacen" },
+      { "data": "estado" },
 			{ "data": "accion" }
 			],
 		});

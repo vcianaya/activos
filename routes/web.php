@@ -58,13 +58,20 @@ Route::get('get_almacenes_sucursal/{id_sucursal}/{id_almacen}','EquipoController
 Route::post('update_equipo','EquipoController@update_equipo');
 Route::post('registro_masivo_equipos','EquipoController@registro_masivo_equipos');
 Route::get('descargar_formato','EquipoController@descargar_formato');
-Route::get('detalle_equipo','EquipoController@detalle_equipo');
+Route::get('detalle_equipo/{id_equipo}','EquipoController@detalle_equipo');
 
 //ACTIVOS FIJOS
 Route::get('asignar_equipo','ActivoController@asignar_equipo');
 Route::get('get_funcionarios/{id_sucursal}','ActivoController@get_funcionarios');
 Route::get('get_almacen/{id_sucursal}','ActivoController@get_almacen');
+Route::get('get_equipos_table/{id_almacen}','ActivoController@get_equipos_table');
+Route::post('save_activos','ActivoController@save_activos');
+Route::get('detalle_funcionario_activos/{id_equipo}','FuncionarioController@get_activos_pdf');
 
+Route::get('devolver_activo','ActivoController@devolver_activo');
+Route::get('get_activos_asignados/{id_funcionario}','ActivoController@get_activos_asignados');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('test','EquipoController@test');
 // DATA TABLES
