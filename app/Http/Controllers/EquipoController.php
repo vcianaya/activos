@@ -422,13 +422,50 @@ public function detalle_equipo($id_equipo)
 
 		PDF::write2DBarcode('equipo,'.$id_equipo, 'QRCODE,L', 170, 250, 40, 40, $style, 'N');
 		PDF::Output('reporte_activos.pdf');
-	}
+}
 
 	public function falla_tecnica()
 	{
 		return view('equipos.falla_tecnica');
 	}
 
+	public function get_equipos_mantenimiento()
+	{
+		$equipos = Equipo::join('almacen', 'almacen.id', '=', 'equipo.almacen')
+		->join('sucursal','almacen.sucursal','=','sucursal.id')
+		->select('equipo.id','equipo.codigo_siaf','equipo.marca','equipo.modelo','equipo.modelo_procesador','equipo.fecha_ingreso','equipo.descripcion','sucursal.nombre as sucursal','almacen.nombre as almacen')
+		->get();
+
+		foreach ($equipos as $item) {
+			$data[] = [
+				'DT_RowId' => $item->id,
+				'codigo_siaf' => $item->codigo_siaf,
+				'marca' => $item->marca,
+				'modelo' => $item->modelo,
+				'modelo_procesador' => $item->modelo_procesador,
+				'fecha_ingreso' => $item->fecha_ingreso,
+				'descripcion' => $item->descripcion,
+				'sucursal' => $item->sucursal,
+				'almacen' => $item->almacen,
+				'estado' => EquipoAsignado::VerificarAsignacion($item->id),
+				'accion' => 
+				'<div class="btn-group">
+				<a href="#" data-balloon="Registrar Falla" data-balloon-pos="up" type="button" class="btn btn-danger mantenimiento">
+				<i class="fa fa-wrench"></i>
+				</a>
+				<a href="'.url('detalle_equipo').'/'.$item->id.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
+				<i class="fa fa-print"></i>
+				</a>
+				</div>'
+			];
+		}
+		return response()->json(['data' => $data]);
+	}
+
+	public function formulario_mantenimiento($id_equipo)
+	{
+		return view('equipos.mantenimiento_form');
+	}
 	public function test()
 	{
 		return EquipoAsignado::VerificarAsignacion(2);

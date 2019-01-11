@@ -19,23 +19,42 @@
 
 	<section class="content">
 		<div class="row">
-			<div class="col-md-4">
-				<div class="box box-primary box-solid">
-					<div class="box-header with-border">
-						<h3 class="box-title">Creacion de categorias</h3>
-					</div>
-					<div class="box-body">
-				
-					</div>
-				</div>
-			</div>
-			<div class="col-md-8">
+			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<h3 class="box-title">LISTADO DE CATEGORIAS DISPONIBLES</h3>
+						<h3 class="box-title">LISTADO DE ACTIVOS</h3>
 					</div>
 					<div class="box-body table-responsive">
-			
+						<table id="equipo-table" class="table table-bordered table-striped table-hover" align="center">
+							<thead>
+								<tr>
+									<th width="60px">Codigo SIAF</th>
+									<th>MARCA</th>
+									<th>MODELO</th>
+									<th>PROCESADOR</th>
+									<th>FECHA INGRESO</th>
+									<th>DESCRIPCION</th>
+									<th>SUCURSAL</th>
+									<th>ALMACEN</th>
+									<th>ASIGNADO A:</th>
+									<th>ACCION</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th width="60px">Codigo SIAF</th>
+									<th>MARCA</th>
+									<th>MODELO</th>
+									<th>PROCESADOR</th>
+									<th>FECHA INGRESO</th>
+									<th>DESCRIPCION</th>
+									<th>SUCURSAL</th>
+									<th>ALMACEN</th>
+									<th>ASIGNADO A:</th>
+									<th>ACCION</th>
+								</tr>
+							</tfoot>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -47,7 +66,7 @@
 @section('js')
 <script type="text/javascript">
 	$(document).ready(function() {
-
+		modal = $('#modal');
 		function notify(type, icon, message) {
 			$.notify({
 						// options
@@ -72,6 +91,51 @@
 						}
 					});
 		}
+
+		table_equipos = $('#equipo-table').DataTable({
+			"processing": true,
+			"aaSorting": [],
+			"ajax": "{{ url('get_equipos_mantenimiento') }}",
+			"language": {
+				"url": "{{ url('template/bower_components/datatables.net/spanish.json') }}"
+			},
+			'columnDefs': [
+			{
+				"targets": [0,1,2],
+				"className": "text-center",
+			},],
+			"columns": [
+			{ "data": "codigo_siaf" },
+			{ "data": "marca" },
+			{ "data": "modelo" },
+			{ "data": "modelo_procesador" },
+			{ "data": "fecha_ingreso" },
+			{ "data": "descripcion" },
+			{ "data": "sucursal" },
+			{ "data": "almacen" },
+      { "data": "estado" },
+			{ "data": "accion" }
+			],
+		});
+
+		table_equipos.on('click', '.mantenimiento', function (e) {
+			e.preventDefault();
+			id_equipo = $(this).closest('tr').attr('id');
+			modal.find('h4').text('ASIGNAR ACTIVOS');
+			modal.find('.btn-default').text('Cancelar');
+			modal.find('.btn-primary').text('Aceptar');
+			$.ajax({
+					url: "{{ url('formulario_mantenimiento') }}/"+id_equipo,
+					success:function(response){
+						body = modal.find('.modal-body');
+						body.html(response);
+					}
+			});
+			modal.find('.btn-primary').off().on('click',function(e){
+				e.preventDefault();
+			});
+			modal.modal('show');
+		});
 
 	})
 </script>
