@@ -167,7 +167,7 @@
 		asignados_table = $('#asignados-table').DataTable({});
 		asignados_table.on('click', '.quitar_activo', function (e) {
 			e.preventDefault();
-			_fila = $(this).closest('tr');
+			id_row = $(this).closest('tr').attr('id');
 			data = asignados_table.row($(this).parents('tr')).data();
 			asignados_table.row($(this).parents('tr')).remove().draw(false);
 			table_equipos.row.add([
@@ -179,8 +179,9 @@
 				data[5],
 				data[6],
 				'<button type="button" class="btn btn-block btn-primary btn-xs asignar_activo">Asignar</button>'
-				]).draw( false );
-			 equipos.splice(equipos.indexOf(data.DT_RowId), 1);
+				]).node().id = id_row;
+      table_equipos.draw(false);
+			 equipos.splice(equipos.indexOf(id_row), 1);
 			 $('#equipos').val(equipos);
 		});
 		//end tabla asignados

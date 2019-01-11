@@ -104,28 +104,52 @@ class ActivoController extends Controller
 		->join('sucursal','almacen.sucursal','=','sucursal.id')
 		->select('equipo_asignado.id as id_asignacion','equipo.id as id_equipo','equipo.descripcion','equipo.nro_serie','equipo.marca','equipo.modelo','equipo.modelo_procesador','equipo.codigo_siaf','equipo.estado_equipo','equipo.fecha_ingreso','equipo.observacion','categoria.nombre as categoria','categoria.vida_util','funcionario.nombre as nombre_funcionario','funcionario.ap_paterno','funcionario.ap_materno','almacen.nombre as almacen','sucursal.nombre as sucursal','equipo_asignado.fec_asignacion')
 		->where('funcionario.id',$id_funcionario)
+		->where('equipo_asignado.estado',1)
 		->get();
-
-		foreach ($equipos as $item) {
-			$data[] = [
-				'DT_RowId' => $item->id_asignacion,
-				'codigo_siaf' => $item->codigo_siaf,
-				'marca' => $item->marca,
-				'modelo_procesador' => $item->modelo_procesador,
-				'fec_asignacion' => $item->fec_asignacion,
-				'descripcion' => $item->descripcion,				
-				'accion' => 
-				'<div class="btn-group">
-				<a href="'.url('detalle_equipo').'/'.$item->id_equipo.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
-				<i class="fa fa-print"></i>
-				</a>
-				<a data-balloon="Devolver Activo" data-balloon-pos="up" type="button" class="btn btn-danger">
-				<i class="fa fa-eject"></i>
-				</a>
-				</div>'
-			];
+		if (count($equipos)>0) {
+			foreach ($equipos as $item) {
+				$data[] = [
+					'DT_RowId' => $item->id_asignacion,
+					'codigo_siaf' => $item->codigo_siaf,
+					'marca' => $item->marca,
+					'modelo_procesador' => $item->modelo_procesador,
+					'fec_asignacion' => $item->fec_asignacion,
+					'descripcion' => $item->descripcion,				
+					'accion' => 
+					'<div class="btn-group">
+					<a data-balloon="Devolver Activo" data-balloon-pos="up" type="button" class="btn btn-danger devolver_activo">
+					<i class="fa fa-eject"></i>
+					</a>
+					</div>'
+				];
+			}
+			return response()->json(['data' => $data]);
+		}else{
+			return response()->json(['data' => false]);
 		}
-		return response()->json(['data' => $data]);
+		
+	}
+
+	public function get_activo_asignado($id_asignacion)
+	{
+		$equipo = EquipoAsignado::join('equipo', 'equipo_asignado.equipo', '=', 'equipo.id')
+		->select('equipo.*','equipo_asignado.id as id_asignacion')
+		->where('equipo_asignado.estado',1)
+		->where('equipo_asignado.id',$id_asignacion)
+		->first();
+		return view('activos.formulario_devolucion',['equipo'=>$equipo]);
+	}
+	public function save_devolver_activos(Request $request)
+	{
+		// estado 1 asignado | 0 devuelto
+		$data = $request->input('asignados');
+		foreach ($data as $item) {
+			$equipoAsignado = EquipoAsignado::find($item['id']);
+			$equipoAsignado->estado = 0;
+			$equipoAsignado->detalle_devolucion = $item['observacion'];
+			$equipoAsignado->save();
+		}
+		return response()->json(['type' => 'success','icon'=>'fa fa-check-circle','message'=>'Activos Devueltos']);
 	}
 }
 

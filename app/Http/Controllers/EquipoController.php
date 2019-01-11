@@ -424,6 +424,11 @@ public function detalle_equipo($id_equipo)
 		PDF::Output('reporte_activos.pdf');
 	}
 
+	public function falla_tecnica()
+	{
+		return view('equipos.falla_tecnica');
+	}
+
 	public function test()
 	{
 		return EquipoAsignado::VerificarAsignacion(2);

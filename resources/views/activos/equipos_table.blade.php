@@ -51,7 +51,7 @@
 	});
 	$("#equipo-table").on('click', '.asignar_activo', function (e) {
 		e.preventDefault();
-		_fila = $(this).closest('tr');
+		id_row = $(this).closest('tr').attr('id');
 		data = table_equipos.row($(this).parents('tr')).data();
 		table_equipos.row($(this).parents('tr')).remove().draw(false);
 		asignados_table.row.add([
@@ -63,8 +63,9 @@
             data[5],
             data[6],
             '<button type="button" class="btn btn-block btn-warning btn-xs quitar_activo">Quitar</button>'
-        ]).draw( false );
-			equipos.push(data.DT_RowId);
+        ]).node().id = id_row;
+			asignados_table.draw(false);
+			equipos.push(id_row);
 			$('#equipos').val(equipos);
 	});
 </script>

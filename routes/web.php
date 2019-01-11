@@ -59,7 +59,8 @@ Route::post('update_equipo','EquipoController@update_equipo');
 Route::post('registro_masivo_equipos','EquipoController@registro_masivo_equipos');
 Route::get('descargar_formato','EquipoController@descargar_formato');
 Route::get('detalle_equipo/{id_equipo}','EquipoController@detalle_equipo');
-
+// FALLA TECNICA
+Route::get('falla_tecnica','EquipoController@falla_tecnica');
 //ACTIVOS FIJOS
 Route::get('asignar_equipo','ActivoController@asignar_equipo');
 Route::get('get_funcionarios/{id_sucursal}','ActivoController@get_funcionarios');
@@ -70,7 +71,8 @@ Route::get('detalle_funcionario_activos/{id_equipo}','FuncionarioController@get_
 
 Route::get('devolver_activo','ActivoController@devolver_activo');
 Route::get('get_activos_asignados/{id_funcionario}','ActivoController@get_activos_asignados');
-
+Route::get('get_activo_asignado/{id_asignacion}','ActivoController@get_activo_asignado');
+Route::post('save_devolver_activos','ActivoController@save_devolver_activos');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('test','EquipoController@test');

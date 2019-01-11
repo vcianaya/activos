@@ -84,7 +84,8 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="{{ url('registrar_equipo') }}"><i class="fa fa-circle-o"></i> Registrar</a></li>
+					<li><a href="{{ url('registrar_equipo') }}"><i class="fa fa-circle-o text-green"></i> Registrar</a></li>
+          <li><a href="{{ url('falla_tecnica') }}"><i class="fa fa-circle-o text-red"></i> Falla Tecnica</a></li>
 				</ul>
 			</li>
 
