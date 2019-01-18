@@ -113,7 +113,7 @@
 			{ "data": "descripcion" },
 			{ "data": "sucursal" },
 			{ "data": "almacen" },
-      { "data": "estado" },
+			{ "data": "estado" },
 			{ "data": "accion" }
 			],
 		});
@@ -121,20 +121,107 @@
 		table_equipos.on('click', '.mantenimiento', function (e) {
 			e.preventDefault();
 			id_equipo = $(this).closest('tr').attr('id');
-			modal.find('h4').text('ASIGNAR ACTIVOS');
+			modal.find('h4').text('FORMULARIO FALLA TECNICA');
 			modal.find('.btn-default').text('Cancelar');
 			modal.find('.btn-primary').text('Aceptar');
 			$.ajax({
-					url: "{{ url('formulario_mantenimiento') }}/"+id_equipo,
-					success:function(response){
-						body = modal.find('.modal-body');
-						body.html(response);
-					}
-			});
-			modal.find('.btn-primary').off().on('click',function(e){
-				e.preventDefault();
+				url: "{{ url('formulario_mantenimiento') }}/"+id_equipo,
+				success:function(response){
+					body = modal.find('.modal-body');
+					body.html(response);
+					modal.find('.btn-primary').off().on('click',function(e){
+						e.preventDefault();
+						$.ajax({
+							url: '{{ url('save_falla_tecnica') }}',
+							type: 'POST',
+							data: new FormData($("#frm_falla_tecnica")[0]),
+							contentType: false,
+							cache: false,
+							processData: false,
+							success: function (result) {
+								modal.modal('hide');
+								notify(result.type, result.icon, result.message);
+								table_equipos.ajax.reload();
+							},
+							error: function (error) {
+								error = error.responseJSON;
+								(error.detalle)?
+								$("#detalle").closest('div').addClass('has-error').find('.help-block').text(error.detalle[0]):
+								$("#detalle").closest('div').removeClass('has-error').find('.help-block').text('');
+								(error.datepicker)?
+								$("#err-datepicker").closest('div').addClass('has-error').find('.help-block').text('El campo fecha de ingreso es requerido'):
+								$("#err-datepicker").closest('div').removeClass('has-error').find('.help-block').text('');
+							}
+						});
+					});
+				}
 			});
 			modal.modal('show');
+		});
+
+		table_equipos.on('click', '.reparacion', function (e) {
+			e.preventDefault();
+			id_equipo = $(this).closest('tr').attr('id');
+			modal.find('h4').text('REGISTRO DE REPARACION');
+			modal.find('.btn-default').text('Cancelar');
+			modal.find('.btn-primary').text('Aceptar');
+			body = modal.find('.modal-body');
+			body.html('');
+			$.ajax({
+				url: "{{ url('register_reparacion') }}/"+id_equipo,
+				success:function(response){
+					body = modal.find('.modal-body');
+					body.html(response);
+					modal.modal('show');
+					modal.find('.btn-primary').off().on('click',function(e){
+						e.preventDefault();
+						$.ajax({
+							url: '{{ url('save_reparacion') }}',
+							type: 'POST',
+							data: new FormData($("#frm_reparacion")[0]),
+							contentType: false,
+							cache: false,
+							processData: false,
+							success: function (result) {
+								modal.modal('hide');
+								notify(result.type, result.icon, result.message);
+								table_equipos.ajax.reload();
+							},
+							error: function (error) {
+								error = error.responseJSON;
+								(error.detalle)?
+								$("#detalle").closest('div').addClass('has-error').find('.help-block').text(error.detalle[0]):
+								$("#detalle").closest('div').removeClass('has-error').find('.help-block').text('');
+								(error.datepicker)?
+								$("#err-datepicker").closest('div').addClass('has-error').find('.help-block').text('El campo fecha de ingreso es requerido'):
+								$("#err-datepicker").closest('div').removeClass('has-error').find('.help-block').text('');
+							}
+						});
+					});
+				}
+			});
+		});
+
+		table_equipos.on('click', '.ver_mas', function (e) {
+			e.preventDefault();
+			id_equipo = $(this).closest('tr').attr('id');
+			modal.find('h4').text('HISTORIAL DE FALLAS DEL EQUIPO');
+			modal.find('.btn-default').text('Cancelar');
+			modal.find('.btn-primary').text('Aceptar');
+			body = modal.find('.modal-body');
+			body.html('');
+			$.ajax({
+				url: "{{ url('show_fallas') }}/"+id_equipo,
+				success:function(response){
+					body = modal.find('.modal-body');
+					body.html(response);
+					modal.modal('show');
+					modal.find('.btn-primary').off().on('click',function(e){
+						e.preventDefault();
+						modal.modal('hide');
+					});
+				}
+			});
 		});
 
 	})

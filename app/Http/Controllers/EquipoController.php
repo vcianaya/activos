@@ -17,6 +17,7 @@ use App\Categoria;
 use App\Almacen;
 use App\Equipo;
 use App\EquipoAsignado;
+use App\FallaTecnica;
 class EquipoController extends Controller
 {
 	public function registrar_categoria()
@@ -448,13 +449,23 @@ public function detalle_equipo($id_equipo)
 				'sucursal' => $item->sucursal,
 				'almacen' => $item->almacen,
 				'estado' => EquipoAsignado::VerificarAsignacion($item->id),
-				'accion' => 
+				'accion' => (count($this->get_falla($item->id))>0)?
+				'
+					<div class="btn-group">
+					<a href="#" data-balloon="Registrar Reparacion" data-balloon-pos="up" type="button" class="btn btn-success reparacion">
+					<i class="fa fa-wrench"></i>
+					</a>
+					<a href="#" data-balloon="Ver Mas" data-balloon-pos="up" type="button" class="btn btn-info ver_mas">
+					<i class="fa fa-eye"></i>
+					</a>
+					</div>
+				':
 				'<div class="btn-group">
 				<a href="#" data-balloon="Registrar Falla" data-balloon-pos="up" type="button" class="btn btn-danger mantenimiento">
 				<i class="fa fa-wrench"></i>
 				</a>
-				<a href="'.url('detalle_equipo').'/'.$item->id.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
-				<i class="fa fa-print"></i>
+				<a href="#" data-balloon="Ver Mas" data-balloon-pos="up" type="button" class="btn btn-info ver_mas">
+				<i class="fa fa-eye"></i>
 				</a>
 				</div>'
 			];
@@ -464,13 +475,111 @@ public function detalle_equipo($id_equipo)
 
 	public function formulario_mantenimiento($id_equipo)
 	{
-		return view('equipos.mantenimiento_form');
+		return view('equipos.mantenimiento_form',['id_equipo'=>$id_equipo]);
 	}
+
+	public function save_falla_tecnica(Request $request){
+		$this->validate($request, [
+			'detalle' => 'required',
+			'datepicker' => 'required'
+		]);
+		$falla = new FallaTecnica();
+		$falla->detalle = $request->detalle;
+		$falla->equipo = $request->id_equipo;
+		$falla->fec_falla = $request->datepicker;
+		$falla->estado = 1;
+		$falla->save();
+		return response()->json(['type' => 'success','icon'=>'fa fa-save','message'=>'Falla registrada']);
+	}
+	public function show_fallas($id_equipo){
+		$falla = FallaTecnica::where('equipo',$id_equipo)->select('*')->get();
+		return view('equipos.show_fallas',['falla'=>$falla]);
+	}
+
+	public function register_reparacion($id_equipo){
+		$falla = FallaTecnica::where('equipo',$id_equipo)->where('estado',1)->select('*')->first();
+		return view('equipos.register_reparacion',['falla'=>$falla]);
+	}
+
+	public function save_reparacion(Request $request)
+	{
+		$this->validate($request, [
+			'detalle' => 'required',
+			'datepicker' => 'required'
+		]);
+		$falla = FallaTecnica::find($request->id);
+		$falla->detalle_reparacion = $request->detalle;
+		$falla->fec_reparacion = $request->datepicker;
+		$falla->estado = 0;
+		$falla->save();
+		return response()->json(['type' => 'success','icon'=>'fa fa-save','message'=>'Reparacion registrada']);
+	}
+
 	public function test()
 	{
 		return EquipoAsignado::VerificarAsignacion(2);
 	}
+	function get_falla($id_equipo)
+	{
+		$falla = FallaTecnica::where('estado',1)
+		->where('equipo',$id_equipo)
+		->first();
+		return $falla;
+	}
+
+	public function get_tiempo_vida_equipos()
+	{
+		$equipos = Equipo::join('almacen', 'almacen.id', '=', 'equipo.almacen')
+		->join('sucursal','almacen.sucursal','=','sucursal.id')
+		->select('equipo.id','equipo.codigo_siaf','equipo.marca','equipo.modelo','equipo.modelo_procesador','equipo.fecha_ingreso','equipo.descripcion','sucursal.nombre as sucursal','almacen.nombre as almacen')
+		->get();
+
+		foreach ($equipos as $item) {
+			$calculo_tiempo = $this->calcular_tiempo($item->id);
+			$data[] = [
+				'DT_RowId' => $item->id,
+				'codigo_siaf' => $item->codigo_siaf,
+				'marca' => $item->marca,
+				'modelo' => $item->modelo,
+				'modelo_procesador' => $item->modelo_procesador,
+				'fecha_ingreso' => $item->fecha_ingreso,
+				'vida_util' => $calculo_tiempo['estado'],
+				'fecha_desuso' => $calculo_tiempo['fecha_desuso'],
+				'descripcion' => $item->descripcion,
+				'sucursal' => $item->sucursal,
+				'almacen' => $item->almacen,
+				'estado' => EquipoAsignado::VerificarAsignacion($item->id),
+				'accion' => 
+				'<div class="btn-group">
+				<a href="'.url('detalle_equipo').'/'.$item->id.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
+				<i class="fa fa-print"></i>
+				</a>
+				</div>'
+			];
+		}
+		return response()->json(['data' => $data]);
+		// $fecha_ingreso = Carbon::createFromFormat('Y-m-d','2019-01-20');
+		// $e = $fecha_ingreso->diff(new \DateTime('2019-01-22'));
+		// dd($e->days);
+	}
+	public function calcular_tiempo($id_equipo){
+		$equipo = Equipo::join('categoria', 'categoria.id', '=', 'equipo.categoria')
+		->select('categoria.vida_util','equipo.fecha_ingreso')
+		->where('equipo.id',$id_equipo)->first();
+		$fecha_ingreso = Carbon::createFromFormat('Y-m-d',$equipo->fecha_ingreso);
+		$fecha_desuso = $fecha_ingreso->addMonths($equipo->vida_util);
+		$tiempo_vida = $fecha_desuso->diff(Carbon::now());
+
+		if ($tiempo_vida->days<= 90) {
+			$estado = '<span class="label label-danger">A desuso dentro de '.$tiempo_vida->days.' dias</span>';
+		}
+		if ($tiempo_vida->days>= 90) {
+			$estado = '<span class="label label-warning">A desuso dentro de '.$tiempo_vida->days.' dias</span>';
+		}
+
+		if ($tiempo_vida->days>= 300) {
+			$estado = '<span class="label label-success">A desuso dentro de '.$tiempo_vida->days.' dias</span>';
+		}
+		return ['fecha_desuso'=>$fecha_desuso->toDateString(),'estado'=>$estado];
+	}
 }
-
-
-

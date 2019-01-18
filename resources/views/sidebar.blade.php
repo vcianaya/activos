@@ -27,7 +27,11 @@
 		<!-- /.search form -->
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header">MENU PRINCIPAL</li>
+			<li class="header">
+        <a href="{{ url('/') }}">
+          MENU PRINCIPAL
+        </a>
+      </li>
 			<li class="treeview active">
 				<a href="#">
 					<i class="fa fa-users"></i> <span>USUARIOS</span>
@@ -105,11 +109,6 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="header">MOVIMIENTO DE ACTIVOS</li>
-			<li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-			<li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-			<li><a href="#"><i class="fa fa-circle-o text-green"></i> <span>Information</span></a></li>
 		</ul>
 	</section>
 	<!-- /.sidebar -->
