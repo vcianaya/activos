@@ -420,8 +420,17 @@ public function detalle_equipo($id_equipo)
 	'module_width' => 1, // width of a single module in points
 	'module_height' => 1 // height of a single module in points
 	);
-
-		PDF::write2DBarcode('equipo,'.$id_equipo, 'QRCODE,L', 170, 250, 40, 40, $style, 'N');
+// $equipo->categoria.','.$equipo->sucursal.','.$equipo->nombre_funcionario.' '.$equipo->ap_paterno.' '.$equipo->ap_materno.','.$equipo->nro_serie.','.$equipo->marca.','.$equipo->codigo_siaf
+		PDF::write2DBarcode(
+      'anaya&'.$equipo->categoria.
+      '&'.$equipo->sucursal.
+      '&'.$equipo->nombre_funcionario.' '.$equipo->ap_paterno.' '.$equipo->ap_materno.
+      '&'.$equipo->nro_serie.
+      '&'.$equipo->marca.
+      '&'.$equipo->codigo_siaf.
+      '&'.$equipo->modelo.
+      '&'.$equipo->descripcion,
+      'QRCODE,L', 170, 250, 40, 40, $style, 'N');
 		PDF::Output('reporte_activos.pdf');
 }
 
