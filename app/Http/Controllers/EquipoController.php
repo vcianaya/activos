@@ -560,7 +560,7 @@ public function detalle_equipo($id_equipo)
 				'estado' => EquipoAsignado::VerificarAsignacion($item->id),
 				'accion' => 
 				'<div class="btn-group">
-				<a href="'.url('detalle_equipo').'/'.$item->id.'/1'.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
+				<a href="'.url('detalle_equipo').'/'.$item->id.'" data-balloon="Imprimir Detalle" data-balloon-pos="up" type="button" class="btn btn-info" target="_blank">
 				<i class="fa fa-print"></i>
 				</a>
 				</div>'
